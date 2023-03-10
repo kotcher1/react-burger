@@ -1,0 +1,29 @@
+.burgerIngredients {
+  display: flex;
+  max-width: 600px;
+  flex-direction: column;
+  box-sizing: border-box;
+}
+
+.title {
+  text-align: left;
+  margin: 0;
+}
+
+.container {
+  width: 100%;
+  max-height: 716px;
+  overflow: auto;
+}
+
+.containerTitle {
+  text-align: left;
+}
+
+.block {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  box-sizing: border-box;
+}
