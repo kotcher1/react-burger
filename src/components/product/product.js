@@ -3,10 +3,10 @@ import React from 'react';
 import { Counter, CurrencyIcon } from '@ya.praktikum/react-developer-burger-ui-components'
 
 import PropTypes from 'prop-types';
+import { infoRules } from '../../utils/prop-types';
 
 import style from './product.module.css'
 import ModalOverlay from '../modal-overlay/modal-overlay';
-import IngredientDetails from '../ingredient-details/ingredient-details';
 
 export default function Product({info, index}) {
 
@@ -44,21 +44,5 @@ export default function Product({info, index}) {
   )
 }
 
-Product.propTypes = {
-  info: PropTypes.shape({
-            "_id": PropTypes.string,
-            "name": PropTypes.string,
-            "type": PropTypes.string,
-            "proteins": PropTypes.number,
-            "fat": PropTypes.number,
-            "carbohydrates": PropTypes.number,
-            "calories": PropTypes.number,
-            "price": PropTypes.number,
-            "image": PropTypes.string,
-            "image_mobile": PropTypes.string,
-            "image_large": PropTypes.string,
-            "__v": PropTypes.number
-          }),
-  index: PropTypes.number,
-}; 
+Product.propTypes = infoRules
 
