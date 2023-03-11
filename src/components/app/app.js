@@ -10,11 +10,13 @@ function App() {
 
   const url = 'https://norma.nomoreparties.space/api/ingredients'
 
+  const checkReponse = (res) => {
+    return res.ok ? res.json() : res.json().then((err) => Promise.reject(err));
+  };
+
   React.useEffect(() => {
     fetch(url)
-    .then(res => {
-      return res.json()
-    })
+    .then(checkReponse)
     .then(res => {
       setIngrediens(res.data)
     })

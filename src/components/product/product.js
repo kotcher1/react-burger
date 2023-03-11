@@ -37,17 +37,28 @@ export default function Product({info, index}) {
       </p>
       {index === 0 && <Counter count={1}/>}
     </div>
-    {isModalOpened && (
-        <ModalOverlay close={closeModal}>
-          <IngredientDetails info={info}/>
-        </ModalOverlay>
+      {isModalOpened && (
+        <ModalOverlay info={info} close={closeModal} type="product" />
       )}
     </>
   )
 }
 
 Product.propTypes = {
-  info: PropTypes.object,
+  info: PropTypes.shape({
+            "_id": PropTypes.string,
+            "name": PropTypes.string,
+            "type": PropTypes.string,
+            "proteins": PropTypes.number,
+            "fat": PropTypes.number,
+            "carbohydrates": PropTypes.number,
+            "calories": PropTypes.number,
+            "price": PropTypes.number,
+            "image": PropTypes.string,
+            "image_mobile": PropTypes.string,
+            "image_large": PropTypes.string,
+            "__v": PropTypes.number
+          }),
   index: PropTypes.number,
 }; 
 
