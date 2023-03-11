@@ -1,0 +1,19 @@
+.card {
+  max-width: 272px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  cursor: pointer;
+}
+
+.priceBlock {
+  display: flex;
+  align-items: center;
+}
+
+.productName {
+  min-height: 48px;
+  text-align: center;
+}
