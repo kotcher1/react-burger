@@ -1,11 +1,13 @@
 import React from 'react';
-import PropTypes from 'prop-types';
-
-import { infoRules } from '../../utils/prop-types';
 
 import style from './ingredient-details.module.css'
 
-export default function IngredientDetails({info}) {
+import {useSelector} from 'react-redux'
+
+export default function IngredientDetails() {
+
+  const info = useSelector(store => store.ingredients.currentIngredient)
+
   return (
     <div className={style.details}>
       <p className={`${style.title} text_type_main-large`}>
@@ -54,5 +56,3 @@ export default function IngredientDetails({info}) {
     </div>
   )
 }
-
-IngredientDetails.propTypes = infoRules

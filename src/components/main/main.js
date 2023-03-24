@@ -3,17 +3,19 @@ import BurgerIngredients from '../burger-Ingredients/burger-Ingredients';
 import BurgerConstructor from '../burger-constructor/burger-constructor';
 
 import PropTypes from 'prop-types';
-import { ingredientRules } from '../../utils/prop-types';
+
+import { DndProvider } from "react-dnd";
+import { HTML5Backend } from "react-dnd-html5-backend";
 
 import style from './main.module.css'
 
-export default function Main({ingredients}) {
+export default function Main() {
   return (
     <main className={`${style.main} pb-10`}>
-      <BurgerIngredients ingredients={ingredients}/>
-      <BurgerConstructor ingredients={ingredients}/>
+      <DndProvider backend={HTML5Backend}>
+        <BurgerIngredients/>
+        <BurgerConstructor/>
+      </DndProvider>
     </main>
   )
 }
-
-Main.propTypes = ingredientRules

@@ -1,81 +1,111 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-
-import { ingredientRules } from '../../utils/prop-types';
+import React, {useState, useEffect} from 'react';
 
 import { ConstructorElement, CurrencyIcon, Button } from '@ya.praktikum/react-developer-burger-ui-components'
 import ModalOverlay from '../modal-overlay/modal-overlay';
 
 import style from './burger-constructor.module.css'
 
-import dots from '../../images/dots.svg'
-import OrderDetails from '../order-details/order-details';
+import { addId } from '../../services/actions/products'
 
-export default function BurgerConstructor({ingredients}) {
+import { useDrop } from "react-dnd";
+import { useSelector, useDispatch } from 'react-redux';
+import { 
+  ADD_INGREDIENT_TO_CURRENTS, 
+  ADD_BUN,  
+} from '../../services/actions/products';
 
-  const [isModalOpened, setIsModalOpened] = React.useState(false)
+import SortedElement from '../sorted-element/sorted-element'
 
-  const changeModalStatus = () => {
-    setIsModalOpened(!isModalOpened)
+export default function BurgerConstructor() {
+
+  const [price, setPrice] = useState(0)
+
+  const dispatch = useDispatch()
+  const constructorIngredientsList = useSelector(store => store.ingredients.currentIngredientsList);
+  const ingredientsList = useSelector(store => store.ingredients.ingredientsList);
+  const bunIngredient = useSelector(store => store.ingredients.bunIngredient);
+  const orderModalOpened = useSelector(store => store.ingredients.orderModalOpened);
+
+  const handleClick = () => {
+    const ingredients = []
+    constructorIngredientsList.map(item => {
+      return ingredients.push(item._id)
+    })
+    ingredients.push(bunIngredient._id)
+    ingredients.unshift(bunIngredient._id)
+    dispatch(addId(ingredients))
   }
+
+  const [, dropTarget] = useDrop({
+    accept: "product",
+    drop(itemId) {
+      const item = ingredientsList.filter(ingredient => {
+        return ingredient._id === itemId._id})
+      if(item[0].type !== 'bun') {
+        dispatch({type: ADD_INGREDIENT_TO_CURRENTS, item
+        })
+      } else {
+        dispatch({type: ADD_BUN, item})
+      }
+    } 
+  });
+
+  useEffect(() => {
+    let ingredientPrice = 0;
+    constructorIngredientsList.length > 0 && constructorIngredientsList.map((item) => ingredientPrice += item.price)
+    const bunPrice = bunIngredient ? bunIngredient.price * 2 : 0
+    setPrice(ingredientPrice + bunPrice)
+  }, [constructorIngredientsList, bunIngredient])
+
 
   return (
     <section className={`${style.constructor} ml-10 mt-25 pl-4 pr-4`}>
-      {ingredients.length > 0 && (
-            <div className={style.block}>
-              <div className='mr-6'>
-                <ConstructorElement
-                  key={ingredients[0].id}
-                  type='top'
-                  isLocked={true}
-                  text={`${ingredients[0].name} (верх)`}
-                  price={ingredients[0].price}
-                  thumbnail={ingredients[0].image_mobile}
-                />
-              </div>
-              <div className={`${style.ingredients} pr-4`}>
-                {ingredients.map((item, index) => {
-                  if(index !== 0) {
-                    return (
-                      <div className={style.line} key={item._id}>
-                        <img src={dots} className='mr-2' alt=''/>
-                        <ConstructorElement
-                          key={item.id}
-                          isLocked={false}
-                          text={item.name}
-                          price={item.price}
-                          thumbnail={item.image_mobile}
-                        />
-                      </div>
-                    )
-                }})}
-              </div>
-              <div className='mr-6'>
-                <ConstructorElement
-                  key={ingredients[0].id}
-                  type='bottom'
-                  isLocked={true}
-                  text={`${ingredients[0].name} (низ)`}
-                  price={ingredients[0].price}
-                  thumbnail={ingredients[0].image_mobile}
-                />
-              </div>
+            <div className={style.block} ref={dropTarget
+            }>
+              {bunIngredient && (
+                <div className='mr-6'>
+                  <ConstructorElement
+                    key={`${bunIngredient.id}top`}
+                    type='top'
+                    isLocked={true}
+                    text={`${bunIngredient.name} (верх)`}
+                    price={bunIngredient.price}
+                    thumbnail={bunIngredient.image_mobile}
+                  />
+                </div>
+              )}
+              {constructorIngredientsList.length > 0 && (
+                <div className={`${style.ingredients} pr-4`}>
+                  {constructorIngredientsList.map((item, index) => {
+                      return <SortedElement item={item} index={index} key={`${item._id}${index}`} />
+                  })}
+                </div>
+              )}
+              {bunIngredient && (
+                <div className='mr-6'>
+                  <ConstructorElement
+                    key={`${bunIngredient.id}bottom`}
+                    type='bottom'
+                    isLocked={true}
+                    text={`${bunIngredient.name} (низ)`}
+                    price={bunIngredient.price}
+                    thumbnail={bunIngredient.image_mobile}
+                  />
+                </div>
+              )}
           </div>
-      )}
       <div className={`${style.buttons} mt-10 mr-4`}>
         <div className={`${style.price} mr-10`}>
-          <p className={`${style.priceNumber} mr-2 text_type_digits-medium`}>610</p>
+          <p className={`${style.priceNumber} mr-2 text_type_digits-medium`}>{price}</p>
           <CurrencyIcon />
         </div>
-        <Button htmlType="button" type="primary" size="medium" onClick={changeModalStatus}>
+        <Button htmlType="button" type="primary" size="medium" onClick={handleClick}>
           Оформить заказ
         </Button>
       </div>
-      {isModalOpened && (
-        <ModalOverlay close={changeModalStatus} />
+      {orderModalOpened && (
+        <ModalOverlay />
       )}
     </section>
   )
 }
-
-BurgerConstructor.propTypes = ingredientRules

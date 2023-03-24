@@ -8,17 +8,15 @@ import Modal from '../modal/modal';
 
 const modal = document.getElementById("react-modals");
 
-export default function ModalOverlay({close, type, info = {}}) {
+export default function ModalOverlay({type}) {
 
   return ReactDOM.createPortal((
     <div className={style.modal} data-value="back">
-      <Modal close={close} type={type} info={info}/>
+      <Modal type={type}/>
     </div>
   ), modal)
 }
 
 ModalOverlay.propTypes = {
-  close: PropTypes.func.isRequired,
   type: PropTypes.string,
-  info: PropTypes.object,
 }; 
