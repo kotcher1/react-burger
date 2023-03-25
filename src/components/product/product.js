@@ -2,7 +2,6 @@ import React from 'react';
 
 import { Counter, CurrencyIcon } from '@ya.praktikum/react-developer-burger-ui-components'
 
-import PropTypes from 'prop-types';
 import { infoRules } from '../../utils/prop-types';
 
 import style from './product.module.css'
@@ -20,9 +19,9 @@ export default function Product({info}) {
 
   const [count, setCount] = React.useState(0);
 
-  const currentIngredients = useSelector(state => state.ingredients.currentIngredientsList)
-  const bunIngredient = useSelector(state => state.ingredients.bunIngredient)
-  const productModalOpened = useSelector(state => state.ingredients.productModalOpened)
+  const currentIngredients = useSelector(state => state.constructors.currentIngredientsList)
+  const bunIngredient = useSelector(state => state.constructors.bunIngredient)
+  const productModalOpened = useSelector(state => state.modal.productModalOpened)
 
   const handleIngredientClick = () => {
     dispatch({type: 'ADD_CURRENT_INGREDIENT', item: info})

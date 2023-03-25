@@ -8,7 +8,7 @@ import {useSelector} from 'react-redux'
 
 export default function OrderDetails() {
 
-  const order = useSelector(store => store.ingredients.order)
+  const order = useSelector(store => store.order.order)
 
   return (
     <div className={`${style.info} mt-20`}>

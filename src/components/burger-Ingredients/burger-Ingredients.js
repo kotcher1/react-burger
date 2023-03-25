@@ -6,8 +6,6 @@ import { addIngredients } from '../../services/actions/products'
 
 import style from './burger-ingredients.module.css'
 
-
-
 export default function BurgerIngredients() {
 
   const [current, setCurrent] = React.useState('one')

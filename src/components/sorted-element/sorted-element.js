@@ -10,10 +10,7 @@ import { useSelector, useDispatch } from 'react-redux';
 
 import { ingredientsShape } from '../../utils/prop-types';
 
-import {  
-  REMOVE_INGREDIENT_FROM_CURRENTS,
-  SORT_CURRENT_INGREDIENT,
-} from '../../services/actions/products';
+import { v4 as uuid } from 'uuid'
 
 import { useDrop, useDrag } from "react-dnd";
 
@@ -21,7 +18,7 @@ import { ConstructorElement } from '@ya.praktikum/react-developer-burger-ui-comp
 
 export default function SortedElement({ item, index}) {
 
-  const constructorIngredientsList = useSelector(store => store.ingredients.currentIngredientsList);
+  const constructorIngredientsList = useSelector(store => store.constructors.currentIngredientsList);
 
   const [cards, setCards] = useState([...constructorIngredientsList])
 
@@ -73,7 +70,7 @@ export default function SortedElement({ item, index}) {
   }, [])
 
   useEffect(() => {
-    dispatch({type: SORT_CURRENT_INGREDIENT, list: cards})
+    dispatch({type: 'SORT_CURRENT_INGREDIENT', list: cards})
   }, [cards])
 
   useEffect(() => {
@@ -83,7 +80,7 @@ export default function SortedElement({ item, index}) {
 const [{ isDragging }, drag] = useDrag({
     type: 'constructorItem',
     item: () => {
-      return { id: `${item._id}${index}`, index }
+      return { id: uuid(), index }
     },
     collect: (monitor) => ({
       isDragging: monitor.isDragging(),
@@ -92,7 +89,7 @@ const [{ isDragging }, drag] = useDrag({
   drag(drop(ref))
 
   const handleDeleteButton = (id, ingredientIndex) => {
-    dispatch({type: REMOVE_INGREDIENT_FROM_CURRENTS, item: constructorIngredientsList.filter((ingredient, index) => {
+    dispatch({type: 'REMOVE_INGREDIENT_FROM_CURRENTS', item: constructorIngredientsList.filter((ingredient, index) => {
       return ingredient._id !== id || index !== ingredientIndex})
     })
   }

@@ -5,14 +5,10 @@ import ModalOverlay from '../modal-overlay/modal-overlay';
 
 import style from './burger-constructor.module.css'
 
-import { addId } from '../../services/actions/products'
+import { addId } from '../../services/actions/order'
 
 import { useDrop } from "react-dnd";
 import { useSelector, useDispatch } from 'react-redux';
-import { 
-  ADD_INGREDIENT_TO_CURRENTS, 
-  ADD_BUN,  
-} from '../../services/actions/products';
 
 import SortedElement from '../sorted-element/sorted-element'
 
@@ -21,10 +17,10 @@ export default function BurgerConstructor() {
   const [price, setPrice] = useState(0)
 
   const dispatch = useDispatch()
-  const constructorIngredientsList = useSelector(store => store.ingredients.currentIngredientsList);
+  const constructorIngredientsList = useSelector(store => store.constructors.currentIngredientsList);
   const ingredientsList = useSelector(store => store.ingredients.ingredientsList);
-  const bunIngredient = useSelector(store => store.ingredients.bunIngredient);
-  const orderModalOpened = useSelector(store => store.ingredients.orderModalOpened);
+  const bunIngredient = useSelector(store => store.constructors.bunIngredient);
+  const orderModalOpened = useSelector(store => store.modal.orderModalOpened);
 
   const handleClick = () => {
     const ingredients = []
@@ -34,6 +30,11 @@ export default function BurgerConstructor() {
     ingredients.push(bunIngredient._id)
     ingredients.unshift(bunIngredient._id)
     dispatch(addId(ingredients))
+    dispatch({
+      type: 'OPEN_MODAL',
+      product: false,
+      order: true.valueOf,
+    })
   }
 
   const [, dropTarget] = useDrop({
@@ -42,10 +43,10 @@ export default function BurgerConstructor() {
       const item = ingredientsList.filter(ingredient => {
         return ingredient._id === itemId._id})
       if(item[0].type !== 'bun') {
-        dispatch({type: ADD_INGREDIENT_TO_CURRENTS, item
+        dispatch({type: 'ADD_INGREDIENT_TO_CURRENTS', item
         })
       } else {
-        dispatch({type: ADD_BUN, item})
+        dispatch({type: 'ADD_BUN', item})
       }
     } 
   });
