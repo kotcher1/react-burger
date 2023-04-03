@@ -4,8 +4,12 @@ import { CloseIcon } from '@ya.praktikum/react-developer-burger-ui-components'
 import style from './modal.module.css'
 import IngredientDetails from '../ingredient-details/ingredient-details';
 import OrderDetails from '../order-details/order-details';
+import { useDispatch } from 'react-redux'
 
-export default function Modal({close, type = '', info}) {
+
+export default function Modal({type = ''}) {
+
+  const dispatch = useDispatch()
 
   React.useEffect(() => {
     document.addEventListener('keydown', handleKeyPress);
@@ -30,18 +34,20 @@ export default function Modal({close, type = '', info}) {
     }
   }
 
+  const close = () => {
+    dispatch({type: 'CLOSE_MODAL'})
+  }
+
   return (
     <div className={`${style.modal} p-10`}>
       <button className={style.button} onClick={close}>
         <CloseIcon type="primary" />
       </button>
-      {type === 'product' ? <IngredientDetails info={info}/> : <OrderDetails />}
+      {type === 'product' ? <IngredientDetails /> : <OrderDetails />}
     </div>
   )
 }
 
 Modal.propTypes = {
-  close: PropTypes.func.isRequired,
   type: PropTypes.string,
-  info: PropTypes.object,
 }; 

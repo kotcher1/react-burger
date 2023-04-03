@@ -4,14 +4,19 @@ import style from './order-details.module.css'
 
 import done from '../../images/done.jpg'
 
+import {useSelector} from 'react-redux'
+
 export default function OrderDetails() {
+
+  const order = useSelector(store => store.order.order)
+
   return (
     <div className={`${style.info} mt-20`}>
       <p className={`${style.number} text_type_digits-large`}>
-        034536
+        {order.order && order.order.number}
       </p>
       <p className={`${style.subtitle} mt-8 text_type_main-medium`}>
-        идентификатор заказа
+        {order.order && order.name}
       </p>
       <img alt="Icon" src={done} className="mt-15"/>
       <p className={`${style.info} text_type_main-small mt-15`}>

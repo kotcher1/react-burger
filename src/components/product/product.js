@@ -2,28 +2,51 @@ import React from 'react';
 
 import { Counter, CurrencyIcon } from '@ya.praktikum/react-developer-burger-ui-components'
 
-import PropTypes from 'prop-types';
 import { infoRules } from '../../utils/prop-types';
 
 import style from './product.module.css'
 import ModalOverlay from '../modal-overlay/modal-overlay';
 
-export default function Product({info, index}) {
+import { useDrag } from "react-dnd";
+import { useSelector, useDispatch } from 'react-redux';
 
-  const [isModalOpened, setIsModalOpened] = React.useState(false)
+export default function Product({info}) {
 
-  const openModal = (e) => {
-    setIsModalOpened(true)
+  const {_id} = info;
+
+  const dispatch = useDispatch()
+
+
+  const [count, setCount] = React.useState(0);
+
+  const currentIngredients = useSelector(state => state.constructors.currentIngredientsList)
+  const bunIngredient = useSelector(state => state.constructors.bunIngredient)
+  const productModalOpened = useSelector(state => state.modal.productModalOpened)
+
+  const handleIngredientClick = () => {
+    dispatch({type: 'ADD_CURRENT_INGREDIENT', item: info})
+    dispatch({type: 'OPEN_MODAL', product: true, order: false})
   }
 
-  const closeModal = (e) => {
-    setIsModalOpened(false)
-  }
+  const [, dragRef] = useDrag({
+    type: "product",
+    item: {_id},
+  });
+
+  React.useEffect(() => {
+    const ingredientsFilterLength = currentIngredients.filter(item => {
+      return item._id === info._id
+    }).length
+    const bunsFilter = bunIngredient._id === info._id
+    setCount(bunsFilter ? 2 : ingredientsFilterLength)
+  }, [currentIngredients, count, bunIngredient])
+
+
 
 
   return (
     <>
-    <div className={`${style.card} mt-6`} onClick={openModal}>
+    <div className={`${style.card} mt-6`} onClick={handleIngredientClick} ref={dragRef}>
       <img src={info.image} alt="Product">
       </img>
       <div className={style.priceBlock}>
@@ -35,10 +58,10 @@ export default function Product({info, index}) {
       <p className={`${style.productName} mt-1 text_type_main-default`}>
         {info.name}
       </p>
-      {index === 0 && <Counter count={1}/>}
+      {count > 0 && <Counter count={count}/>}
     </div>
-      {isModalOpened && (
-        <ModalOverlay info={info} close={closeModal} type="product" />
+      {productModalOpened && (
+        <ModalOverlay info={info} type="product" />
       )}
     </>
   )
