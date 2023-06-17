@@ -24,4 +24,14 @@
 
 .button {
   line-height: 60px;
+  cursor: pointer;
+  color: #8585AD;
+}
+
+.link {
+  text-decoration: none;
+}
+
+.buttonsLine {
+  display: flex
 }

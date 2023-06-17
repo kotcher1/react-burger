@@ -1,5 +1,6 @@
 import React, {useEffect, useRef} from 'react';
 import Product from '../product/product';
+import ModalOverlay from '../modal-overlay/modal-overlay';
 import { Tab } from '@ya.praktikum/react-developer-burger-ui-components'
 import { useSelector, useDispatch } from 'react-redux';
 import { addIngredients } from '../../services/actions/products'
@@ -20,6 +21,8 @@ export default function BurgerIngredients() {
   const dispatch = useDispatch()
 
   const ingredientsList = useSelector(store => store.ingredients.ingredientsList);
+  const productModalOpened = useSelector(state => state.modal.productModalOpened);
+  const currentIngredient = useSelector(store => store.ingredients.currentIngredient)
 
   useEffect(() => {
     const tabTop = tabs.current.getBoundingClientRect().top + 200;
@@ -90,7 +93,9 @@ export default function BurgerIngredients() {
           </div>
         </div>
       </div>    
-
+      {productModalOpened && (
+        <ModalOverlay info={currentIngredient} type="product" />
+      )}
     </section>
   )
 }

@@ -11,4 +11,9 @@
 
 .link {
   color: #4C4CFF;
+  text-decoration: none;
+}
+
+.link:hover {
+  opacity: .8;
 }

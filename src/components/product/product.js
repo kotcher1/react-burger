@@ -1,11 +1,12 @@
-import React from 'react';
+import React, {useEffect} from 'react';
+
+import { useNavigate } from 'react-router-dom';
 
 import { Counter, CurrencyIcon } from '@ya.praktikum/react-developer-burger-ui-components'
 
 import { infoRules } from '../../utils/prop-types';
 
 import style from './product.module.css'
-import ModalOverlay from '../modal-overlay/modal-overlay';
 
 import { useDrag } from "react-dnd";
 import { useSelector, useDispatch } from 'react-redux';
@@ -16,17 +17,27 @@ export default function Product({info}) {
 
   const dispatch = useDispatch()
 
+  const navigate = useNavigate()
+
 
   const [count, setCount] = React.useState(0);
 
   const currentIngredients = useSelector(state => state.constructors.currentIngredientsList)
   const bunIngredient = useSelector(state => state.constructors.bunIngredient)
-  const productModalOpened = useSelector(state => state.modal.productModalOpened)
+
+  const currentIngredient = useSelector(store => store.ingredients.currentIngredient)
+
 
   const handleIngredientClick = () => {
     dispatch({type: 'ADD_CURRENT_INGREDIENT', item: info})
     dispatch({type: 'OPEN_MODAL', product: true, order: false})
   }
+
+  useEffect(() => {
+    if(currentIngredient._id) {
+      navigate(`/ingredients/${currentIngredient._id}`)
+    }
+  }, [currentIngredient])
 
   const [, dragRef] = useDrag({
     type: "product",
@@ -40,9 +51,6 @@ export default function Product({info}) {
     const bunsFilter = bunIngredient._id === info._id
     setCount(bunsFilter ? 2 : ingredientsFilterLength)
   }, [currentIngredients, count, bunIngredient])
-
-
-
 
   return (
     <>
@@ -60,9 +68,6 @@ export default function Product({info}) {
       </p>
       {count > 0 && <Counter count={count}/>}
     </div>
-      {productModalOpened && (
-        <ModalOverlay info={info} type="product" />
-      )}
     </>
   )
 }

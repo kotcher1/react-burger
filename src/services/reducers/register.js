@@ -2,17 +2,11 @@ import {
   REGISTER_REQUEST,
   REGISTER_SUCCESS,
   REGISTER_FAILED,
-  SET_USER_INFORMATION,
 } from '../actions/register'
 
 const initialState = {
   registerRequest: false,
   regiterFailed: false,
-  email: '',
-  name: '',
-  password: '',
-  accessToken: '',
-  refreshToken: '',
 }
 
 export const registerReducer = (state = initialState, action) => {
@@ -27,7 +21,6 @@ export const registerReducer = (state = initialState, action) => {
       return {
         ...state,
         accessToken: action.accessToken,
-        refreshToken: action.refreshToken,
         registerRequest: false,
         registerFailed: false,
       }
@@ -37,14 +30,6 @@ export const registerReducer = (state = initialState, action) => {
         ...state,
         registerRequest: false,
         registerFailed: true,
-      }
-    }
-    case SET_USER_INFORMATION: {
-      return {
-        ...state,
-        email: action.email,
-        name: action.name,
-        password: action.password,
       }
     }
     default: {

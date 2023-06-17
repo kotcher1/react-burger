@@ -1,4 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+
+import { Navigate } from 'react-router-dom';
 
 import { EmailInput, PasswordInput, Input, Button } from '@ya.praktikum/react-developer-burger-ui-components'
 
@@ -8,13 +10,19 @@ import { useSelector, useDispatch } from 'react-redux'
 
 import { register } from '../../services/actions/register'
 
-export default function Registration() {
+import { navLinkFunction } from '../../utils/prop-types'
+
+export default function Registration({changeNav}) {
 
   const [email, setEmail] = useState('')
   const [name, setName] = useState('')
   const [password, setPassword] = useState('')
 
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    changeNav('')
+  }, [])
 
   const handleChangeInput = (e) => {
     if(e.target.name === 'name') {
@@ -28,16 +36,12 @@ export default function Registration() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    dispatch({
-      type: 'SET_USER_INFORMATION',
-      email,
-      name,
-      password,
-    })
-    dispatch(register(name, email, password))
+    dispatch(register({name, email, password}))
   }
 
-  return (
+  const signIn = useSelector(store => store.user.signIn);
+
+  return !signIn ? (
     <div className={styles.form_container}>
       <h2 className={`${styles.title} text_type_main-medium mt-2 mb-0`}>
         Регистрация
@@ -51,6 +55,7 @@ export default function Registration() {
           extraClass="mt-6"
           value={name}
           onChange={handleChangeInput}
+          required={true}
         />
         <EmailInput 
           placeholder="E-mail" 
@@ -58,6 +63,7 @@ export default function Registration() {
           name={'email'} 
           extraClass="mt-6"
           onChange={handleChangeInput}
+          required={true}
         />
         <PasswordInput
           name={'password'}
@@ -65,6 +71,7 @@ export default function Registration() {
           extraClass="mt-6"
           value={password}
           onChange={handleChangeInput}
+          required={true}
         />
         <Button htmlType="button" type="primary" size="large" extraClass="mt-6" onClick={handleSubmit}>
           Зарегистрироваться
@@ -76,5 +83,11 @@ export default function Registration() {
         </p>
       </div>
     </div>
+  ) : (
+    <Navigate
+      to={'/'}
+    />
   )
 }
+
+Registration.propsType = navLinkFunction

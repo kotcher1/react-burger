@@ -24,3 +24,7 @@ export const ingredientRules = {
     ingredientsShape,
   ).isRequired
 }
+
+export const navLinkFunction = {
+  changeNav: PropTypes.func,
+}

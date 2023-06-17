@@ -1,14 +1,45 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 
 import style from './ingredient-details.module.css'
 
-import {useSelector} from 'react-redux'
+import {useSelector, useDispatch} from 'react-redux'
 
-export default function IngredientDetails() {
+import { useParams } from 'react-router-dom';
+import { addIngredients } from '../../services/actions/products'
 
-  const info = useSelector(store => store.ingredients.currentIngredient)
+import { navLinkFunction } from '../../utils/prop-types'
 
-  return (
+export default function IngredientDetails({changeNav}) {
+
+  const dispatch = useDispatch()
+
+  const ingredients = useSelector(store => store.ingredients.ingredientsList)
+
+  useEffect(() => {
+    if(ingredients.length === 0) {
+      dispatch(addIngredients())
+    }
+    if(changeNav) {
+      changeNav('constructor')
+    }
+  }, [])
+
+  useEffect(() => {
+    if(ingredients.length === 0) {
+      dispatch(addIngredients())
+    }
+  }, [ingredients])
+
+  const {id} = useParams()
+
+  const currentIngredient = useSelector(store => store.ingredients.currentIngredient)
+  const idIngredient = ingredients.find(element => element._id === id)
+
+ 
+
+  const info = currentIngredient._id ? currentIngredient : idIngredient
+
+  return info && (
     <div className={style.details}>
       <p className={`${style.title} text_type_main-large`}>
         Детали ингредиента
@@ -56,3 +87,5 @@ export default function IngredientDetails() {
     </div>
   )
 }
+
+IngredientDetails.propsType = navLinkFunction

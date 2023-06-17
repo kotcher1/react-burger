@@ -1,29 +1,41 @@
 import { createUser } from '../api.js'
-import { Navigate } from 'react-router-dom'
+import { setCookie } from '../utils';
+import { getToken } from './user';
 
 export const REGISTER_REQUEST = 'REGISTER_REQUEST';
 export const REGISTER_SUCCESS = 'REGISTER_SUCCESS';
 export const REGISTER_FAILED = 'REGISTER_FAILED';
-export const SET_USER_INFORMATION = 'SET_USER_INFORMATION'
 
-export function register(name, email, password) {
+export function register({name, email, password}) {
   return function(dispatch) {
     dispatch({
       type: 'REGISTER_REQUEST',
     });
-    createUser(name, email, password)
+    createUser({name, email, password})
+    .then(res => res.json())
     .catch((err) => {
+      console.log(err)
       dispatch({
-        type: REGISTER_FAILED
+        type: 'REGISTER_FAILED'
       });
     })
     .then(res => {
       if (res && res.success) {
         dispatch({
           type: 'REGISTER_SUCCESS',
-          accessToken: res.accessToken,
-          refreshToken: res.refreshToken,
         });
+        setCookie('token', res.refreshToken)
+        dispatch({
+          type: 'SET_USER_INFORMATION',
+          email: res.user.email,
+          name: res.user.name,
+          accessToken: res.accessToken,
+        })
+        dispatch({
+          type: "SET_PASSWORD",
+          password,
+        })
+        dispatch(getToken());
       } else {
         dispatch({
           type: 'REGISTER_FAILED'

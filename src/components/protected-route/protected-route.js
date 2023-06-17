@@ -1,16 +1,21 @@
-import { useEffect, useState } from 'react';
 
-export const ProtectedRoute = ({ element }) => {
-  const [isUserLoaded, setUserLoaded] = useState(false);
+import { Navigate } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 
-  // const init = async () => {
-  //   await getUser()
-  //   setUserLoaded(true)
-  // };
+import PropTypes from 'prop-types';
 
-  // useEffect(() => {
-  //   init();
-  // }, []);
 
-  return false ? element : null;
+export const ProtectedRoute = ({ element, type = '' }) => {
+
+    const signIn = useSelector(store => store.user.signIn);
+
+    const login = signIn ? element : <Navigate to={"/login"}/>
+    const noLogin = signIn ? <Navigate to={"/"}/> : element
+  
+    return type === 'no-login' ? noLogin : login;
+}
+
+ProtectedRoute.propsType = {
+  element: PropTypes.element,
+  type: PropTypes.string,
 }
