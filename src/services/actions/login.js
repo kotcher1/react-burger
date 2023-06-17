@@ -1,6 +1,5 @@
 import { loginRequest } from '../api.js'
 import { setCookie } from '../utils';
-import { getToken } from './user';
 
 export const LOGIN_REQUEST = 'LOGIN_REQUEST';
 export const LOGIN_SUCCESS = 'LOGIN_SUCCESS';
@@ -33,8 +32,8 @@ export function login({name, email, password}) {
           type: "SET_PASSWORD",
           password,
         })
-        setCookie('token', res.refreshToken)
-        dispatch(getToken())
+        setCookie('token', res.refreshToken, {path: '/'})
+        setCookie('accessToken', res.accessToken, {path: '/'})
       } else {
         dispatch({
           type: 'LOGIN_FAILED'

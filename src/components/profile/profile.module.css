@@ -28,10 +28,16 @@
   color: #8585AD;
 }
 
+
+
 .link {
   text-decoration: none;
 }
 
 .buttonsLine {
   display: flex
+}
+
+.buttonActive {
+  color: white;
 }

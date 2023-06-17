@@ -1,6 +1,5 @@
 import { logoutRequest } from '../api.js'
 import { deleteCookie, getCookie } from '../utils';
-import { stopInterval } from './user';
 
 export const LOGOUT_REQUEST = 'LOGOUT_REQUEST';
 export const LOGOUT_SUCCESS = 'LOGOUT_SUCCESS';
@@ -32,8 +31,8 @@ export function logout() {
         dispatch({
           type: 'USER_LOGOUT',
         })
-        deleteCookie('token')
-        stopInterval()
+        deleteCookie('token', {path: '/'})
+        deleteCookie('accessToken', {path: '/'})
       } else {
         dispatch({
           type: 'LOGOUT_FAILED'

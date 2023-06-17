@@ -1,7 +1,5 @@
 import React, { useState, useEffect } from 'react';
 
-import { Navigate } from 'react-router-dom';
-
 import { EmailInput, PasswordInput, Input, Button } from '@ya.praktikum/react-developer-burger-ui-components'
 
 import styles from '../form/form.module.css'
@@ -41,7 +39,7 @@ export default function Registration({changeNav}) {
 
   const signIn = useSelector(store => store.user.signIn);
 
-  return !signIn ? (
+  return (
     <div className={styles.form_container}>
       <h2 className={`${styles.title} text_type_main-medium mt-2 mb-0`}>
         Регистрация
@@ -83,10 +81,6 @@ export default function Registration({changeNav}) {
         </p>
       </div>
     </div>
-  ) : (
-    <Navigate
-      to={'/'}
-    />
   )
 }
 

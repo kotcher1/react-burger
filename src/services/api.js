@@ -17,7 +17,7 @@ export const createUser = async ({name, email, password}) => {
 }
 
 export const getUserRequest = async token =>
-  await fetch(`${url}/api/auth/user`, {
+  await fetch(`${url}/auth/user`, {
     method: 'GET',
     mode: 'cors',
     cache: 'no-cache',

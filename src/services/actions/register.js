@@ -1,6 +1,5 @@
 import { createUser } from '../api.js'
 import { setCookie } from '../utils';
-import { getToken } from './user';
 
 export const REGISTER_REQUEST = 'REGISTER_REQUEST';
 export const REGISTER_SUCCESS = 'REGISTER_SUCCESS';
@@ -24,7 +23,8 @@ export function register({name, email, password}) {
         dispatch({
           type: 'REGISTER_SUCCESS',
         });
-        setCookie('token', res.refreshToken)
+        setCookie('token', res.refreshToken, {path: '/'})
+        setCookie('accessToken', res.accessToken, {path: '/'})
         dispatch({
           type: 'SET_USER_INFORMATION',
           email: res.user.email,
@@ -35,7 +35,6 @@ export function register({name, email, password}) {
           type: "SET_PASSWORD",
           password,
         })
-        dispatch(getToken());
       } else {
         dispatch({
           type: 'REGISTER_FAILED'

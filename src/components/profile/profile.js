@@ -66,12 +66,12 @@ export default function Profile({changeNav}) {
     <div className={`${styles.page} pt-30`}>
       <div className={`${styles.pageColumn} ${styles.navigation}`}>
         <Link className={styles.link} to="/profile">
-          <p className={`${styles.button} text text_type_main-medium`}>
+          <p className={`${styles.button} ${section ? '' : styles.buttonActive} text text_type_main-medium`}>
             Профиль
           </p>
         </Link>
         <Link className={styles.link} to="/profile/orders">
-          <p className={`${styles.button} text text_type_main-medium text_color_inactive`}>
+          <p className={`${styles.button} ${section ? styles.buttonActive : ''} text text_type_main-medium`}>
             История заказов
           </p>
         </Link>

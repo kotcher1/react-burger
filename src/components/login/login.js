@@ -1,18 +1,18 @@
 import React, { useState, useEffect } from 'react';
 
-import { Navigate } from 'react-router-dom';
+import { Navigate, useLocation } from 'react-router-dom';
 
 import { EmailInput, PasswordInput, Button } from '@ya.praktikum/react-developer-burger-ui-components'
 
 import styles from '../form/form.module.css'
 
-import { useDispatch, connect } from 'react-redux'
+import { useDispatch } from 'react-redux'
 
 import { login } from '../../services/actions/login'
 
 import PropTypes from 'prop-types';
 
-function Login({signIn, changeNav}) {
+export default function Login({changeNav}) {
 
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
@@ -36,19 +36,20 @@ function Login({signIn, changeNav}) {
     dispatch(login({email, password}))
   }
 
-  return !signIn ? (
+  return (
     <div className={styles.form_container}>
       <h2 className={`${styles.title} text_type_main-medium mt-2 mb-0`}>
         Вход
       </h2>
       <form className={`${styles.form} text_type_main-medium`}>
-        <EmailInput placeholder="E-mail" name={'email'} extraClass="mt-6" onChange={handleChangeInput} required={true}/>
+        <EmailInput placeholder="E-mail" name={'email'} extraClass="mt-6" onChange={handleChangeInput} value={email} required={true}/>
         <PasswordInput
           name={'password'}
           icon='ShowIcon'
           extraClass="mt-6"
           onChange={handleChangeInput}
           required={true}
+          value={password}
         />
         <Button htmlType="button" type="primary" size="large" extraClass="mt-6" onClick={handleSubmit}>
           Войти
@@ -63,14 +64,8 @@ function Login({signIn, changeNav}) {
         </p>
       </div>
     </div>
-  ) : (
-    <Navigate to={"/"}/>
   )
 }
-
-export default connect(
-  (state) => ({signIn: state.user.signIn})
-)(Login)
 
 Login.propsType = {
   changeNav: PropTypes.func,

@@ -1,6 +1,5 @@
 import React, {useEffect, useRef} from 'react';
 import Product from '../product/product';
-import ModalOverlay from '../modal-overlay/modal-overlay';
 import { Tab } from '@ya.praktikum/react-developer-burger-ui-components'
 import { useSelector, useDispatch } from 'react-redux';
 import { addIngredients } from '../../services/actions/products'
@@ -92,10 +91,7 @@ export default function BurgerIngredients() {
             })}
           </div>
         </div>
-      </div>    
-      {productModalOpened && (
-        <ModalOverlay info={currentIngredient} type="product" />
-      )}
+      </div>
     </section>
   )
 }

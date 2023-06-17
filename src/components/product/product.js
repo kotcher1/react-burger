@@ -1,6 +1,6 @@
 import React, {useEffect} from 'react';
 
-import { useNavigate } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 
 import { Counter, CurrencyIcon } from '@ya.praktikum/react-developer-burger-ui-components'
 
@@ -17,9 +17,6 @@ export default function Product({info}) {
 
   const dispatch = useDispatch()
 
-  const navigate = useNavigate()
-
-
   const [count, setCount] = React.useState(0);
 
   const currentIngredients = useSelector(state => state.constructors.currentIngredientsList)
@@ -33,11 +30,7 @@ export default function Product({info}) {
     dispatch({type: 'OPEN_MODAL', product: true, order: false})
   }
 
-  useEffect(() => {
-    if(currentIngredient._id) {
-      navigate(`/ingredients/${currentIngredient._id}`)
-    }
-  }, [currentIngredient])
+  const location = useLocation()
 
   const [, dragRef] = useDrag({
     type: "product",
@@ -53,7 +46,11 @@ export default function Product({info}) {
   }, [currentIngredients, count, bunIngredient])
 
   return (
-    <>
+    <Link
+      className={style.link}
+      to={`/ingredients/${info._id}`}
+      state={{ backgroundLocation: location }}
+    >
     <div className={`${style.card} mt-6`} onClick={handleIngredientClick} ref={dragRef}>
       <img src={info.image} alt="Product">
       </img>
@@ -68,7 +65,7 @@ export default function Product({info}) {
       </p>
       {count > 0 && <Counter count={count}/>}
     </div>
-    </>
+    </Link>
   )
 }
 
