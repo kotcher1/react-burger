@@ -30,7 +30,7 @@ export const getUserRequest = async token =>
     referrerPolicy: 'no-referrer'
   });
 
-export const updateUserRequest = async (form, token) =>
+export const updateUserRequest = async (token, form) =>
   await fetch(`${url}/auth/user`, {
     method: 'PATCH',
     mode: 'cors',
@@ -117,5 +117,7 @@ export const getTokenRequest = async form => {
     redirect: 'follow',
     referrerPolicy: 'no-referrer',
     body: JSON.stringify(form)
-  });
+  })
+  .then(res => res.json())
+  .catch(err => console.log(err))
 };

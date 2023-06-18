@@ -5,7 +5,7 @@ import {
   getUserRequest, 
   updateUserRequest 
 } from '../api.js'
-import { getCookie, setCookie, deleteCookie } from '../utils';
+import { getCookie, setCookie } from '../utils';
 
 export const SET_USER_INFORMATION = 'SET_USER_INFORMATION'
 export const PASSWORD_REQUEST = 'PASSWORD_REQUEST'
@@ -17,12 +17,9 @@ export const SET_SIGNIN = 'SET_SIGNIN'
 
 export function getUser(accessToken) {
   return function(dispatch) {
-    getUserRequest(accessToken)
-    .then(res => res.json())
+    fetchWithRefresh(getUserRequest, accessToken)
     .catch((err) => {
-      if (err.message === "jwt expired") {
-        getToken('getUser')
-      }
+      console.log(err)
     })
     .then(res => {
       if (res && res.success) {
@@ -31,6 +28,10 @@ export function getUser(accessToken) {
           email: res.user.email,
           name: res.user.name,
         })
+        dispatch({
+          type: 'SET_TOKEN',
+          accessToken: getCookie('accessToken'),
+        });
       }
     })
   }
@@ -38,12 +39,9 @@ export function getUser(accessToken) {
 
 export function changeUser(form, accessToken) {
   return function(dispatch) {
-    updateUserRequest(form, accessToken)
-    .then(res => res.json())
+    fetchWithRefresh(updateUserRequest, accessToken, form)
     .catch((err) => {
-      if (err.message === "jwt expired") {
-        getToken('changeUser')
-      }
+      console.log(err)
     })
     .then(res => {
       if (res && res.success) {
@@ -56,6 +54,10 @@ export function changeUser(form, accessToken) {
           email: res.user.email,
           name: res.user.name,
         })
+        dispatch({
+          type: 'SET_TOKEN',
+          accessToken: getCookie('accessToken'),
+        });
       }
     });
   }
@@ -96,28 +98,24 @@ export function resetPassword(form) {
   }
 };
 
-export function getToken(type) {
-  return function(dispatch) {
-    getTokenRequest({token: getCookie('token')})
-    .then(res => res.json())
-    .catch((err) => {
-      console.log(err)
-    })
-    .then(res => {
-      if (res && res.success) {
-        dispatch({
-          type: 'SET_TOKEN',
-          accessToken: res.accessToken,
-        });
-        setCookie('token', res.refreshToken, {path: '/'})
-        setCookie('accessToken', res.accessToken, {path: '/'})
-        if(type === 'getUser') {
-          dispatch(getUser(res.accessToken))
-        } else if (type === 'changeUser') {
-          dispatch(changeUser(res.accessToken))
-        }
-      }
-    })
+const checkResponse = (res) => {
+  return res.ok ? res.json() : res.json().then((err) => Promise.reject(err));
+};
+
+const fetchWithRefresh = async (fc, accessToken, form = {}) => {
+  try {
+    const res = await fc(accessToken, form);
+    return await checkResponse(res);
+  } catch (err) {
+    if (err.message === "jwt expired") {
+      const refreshData = await getTokenRequest({token: getCookie('token')});
+      setCookie('token', refreshData.refreshToken, {path: '/'})
+      setCookie('accessToken', refreshData.accessToken, {path: '/'})
+      const res = await fc(refreshData.accessToken, form);
+      return await checkResponse(res);
+    } else {
+      return Promise.reject(err);
+    }
   }
-}
+};
 
