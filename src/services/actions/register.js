@@ -1,4 +1,4 @@
-import { createUser } from '../api.js'
+import { createUser } from '../api'
 import { setCookie } from '../utils';
 
 export const REGISTER_REQUEST = 'REGISTER_REQUEST';

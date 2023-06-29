@@ -1,5 +1,4 @@
-import React from 'react';
-import PropTypes from 'prop-types';
+import React, {KeyboardEvent} from 'react';
 import { CloseIcon } from '@ya.praktikum/react-developer-burger-ui-components'
 import style from './modal.module.css'
 import IngredientDetails from '../ingredient-details/ingredient-details';
@@ -7,31 +6,38 @@ import OrderDetails from '../order-details/order-details';
 import { useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom';
 
+type HTMLElementEvent<T extends HTMLElement> = Event & {
+  target: T;
+}
 
-export default function Modal({type = ''}) {
+export default function Modal({type = ''}: {type?: string}) {
 
   const navigate = useNavigate()
 
   const dispatch = useDispatch()
 
   React.useEffect(() => {
+    // @ts-ignore
     document.addEventListener('keydown', handleKeyPress);
+    // @ts-ignore
     document.addEventListener('click', closeModal)
   
     return () => {
+      // @ts-ignore
       document.removeEventListener('keydown', handleKeyPress);
+      // @ts-ignore
       document.removeEventListener('click', closeModal)
     };
 
   }, []);
 
-  const closeModal = (e) => {
+  const closeModal = (e: HTMLElementEvent<HTMLButtonElement>): void => {
     if(e.target.dataset.value === 'back') {
       close()
     }
   }
 
-  const handleKeyPress = (e) => {
+  const handleKeyPress = (e: KeyboardEvent<HTMLElement>): void => {
     if(e.key === 'Escape') {
       close()
     }
@@ -54,7 +60,3 @@ export default function Modal({type = ''}) {
     </div>
   )
 }
-
-Modal.propTypes = {
-  type: PropTypes.string,
-}; 

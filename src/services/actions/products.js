@@ -1,4 +1,4 @@
-import { getIngredients } from '../api.js'
+import { getIngredients } from '../api'
 export const RESET_ORDER = 'RESET_ORDER'
 
 export const GET_INGREDIENTS_REQUEST = 'GET_ITEMS_REQUEST';

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, FormEvent, ChangeEvent } from 'react';
 
 import { EmailInput, PasswordInput, Input, Button } from '@ya.praktikum/react-developer-burger-ui-components'
 
@@ -8,13 +8,11 @@ import { useSelector, useDispatch } from 'react-redux'
 
 import { register } from '../../services/actions/register'
 
-import { navLinkFunction } from '../../utils/prop-types'
+export default function Registration({changeNav}: {changeNav: (val: string) => void}) {
 
-export default function Registration({changeNav}) {
-
-  const [email, setEmail] = useState('')
-  const [name, setName] = useState('')
-  const [password, setPassword] = useState('')
+  const [email, setEmail] = useState<string>('')
+  const [name, setName] = useState<string>('')
+  const [password, setPassword] = useState<string>('')
 
   const dispatch = useDispatch();
 
@@ -22,7 +20,7 @@ export default function Registration({changeNav}) {
     changeNav('')
   }, [])
 
-  const handleChangeInput = (e) => {
+  const handleChangeInput = (e: ChangeEvent<HTMLInputElement>) => {
     if(e.target.name === 'name') {
       setName(e.target.value)
     } else if(e.target.name === 'email') {
@@ -32,19 +30,18 @@ export default function Registration({changeNav}) {
     }
   }
 
-  const handleSubmit = (e) => {
+  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    //@ts-ignore
     dispatch(register({name, email, password}))
   }
-
-  const signIn = useSelector(store => store.user.signIn);
 
   return (
     <div className={styles.form_container}>
       <h2 className={`${styles.title} text_type_main-medium mt-2 mb-0`}>
         Регистрация
       </h2>
-      <form className={`${styles.form} text_type_main-medium`}>
+      <form onSubmit={handleSubmit} className={`${styles.form} text_type_main-medium`}>
         <Input
           type={'text'}
           placeholder={'Имя'}
@@ -71,7 +68,7 @@ export default function Registration({changeNav}) {
           onChange={handleChangeInput}
           required={true}
         />
-        <Button htmlType="button" type="primary" size="large" extraClass="mt-6" onClick={handleSubmit}>
+        <Button htmlType="submit" type="primary" size="large" extraClass="mt-6">
           Зарегистрироваться
         </Button>
       </form>
@@ -83,5 +80,3 @@ export default function Registration({changeNav}) {
     </div>
   )
 }
-
-Registration.propsType = navLinkFunction

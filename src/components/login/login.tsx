@@ -1,6 +1,4 @@
-import React, { useState, useEffect } from 'react';
-
-import { Navigate, useLocation } from 'react-router-dom';
+import React, { useState, useEffect, ChangeEvent, FormEvent } from 'react';
 
 import { EmailInput, PasswordInput, Button } from '@ya.praktikum/react-developer-burger-ui-components'
 
@@ -10,12 +8,10 @@ import { useDispatch } from 'react-redux'
 
 import { login } from '../../services/actions/login'
 
-import PropTypes from 'prop-types';
+export default function Login({changeNav}: {changeNav: (val: string) => void}) {
 
-export default function Login({changeNav}) {
-
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
+  const [email, setEmail] = useState<string>('')
+  const [password, setPassword] = useState<string>('')
 
   const dispatch = useDispatch();
 
@@ -23,7 +19,7 @@ export default function Login({changeNav}) {
     changeNav('')
   }, [])
 
-  const handleChangeInput = (e) => {
+  const handleChangeInput = (e: ChangeEvent<HTMLInputElement>) => {
     if(e.target.name === 'email') {
       setEmail(e.target.value)
     } else if(e.target.name === 'password') {
@@ -31,8 +27,9 @@ export default function Login({changeNav}) {
     }
   }
 
-  const handleSubmit = (e) => {
+  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    // @ts-ignore
     dispatch(login({email, password}))
   }
 
@@ -41,7 +38,7 @@ export default function Login({changeNav}) {
       <h2 className={`${styles.title} text_type_main-medium mt-2 mb-0`}>
         Вход
       </h2>
-      <form className={`${styles.form} text_type_main-medium`}>
+      <form onSubmit={handleSubmit} className={`${styles.form} text_type_main-medium`}>
         <EmailInput placeholder="E-mail" name={'email'} extraClass="mt-6" onChange={handleChangeInput} value={email} required={true}/>
         <PasswordInput
           name={'password'}
@@ -51,7 +48,7 @@ export default function Login({changeNav}) {
           required={true}
           value={password}
         />
-        <Button htmlType="button" type="primary" size="large" extraClass="mt-6" onClick={handleSubmit}>
+        <Button htmlType="submit" type="primary" size="large" extraClass="mt-6">
           Войти
         </Button>
       </form>
@@ -65,9 +62,4 @@ export default function Login({changeNav}) {
       </div>
     </div>
   )
-}
-
-Login.propsType = {
-  changeNav: PropTypes.func,
-  signIn: PropTypes.bool,
 }

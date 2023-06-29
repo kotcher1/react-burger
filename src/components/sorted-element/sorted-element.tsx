@@ -1,28 +1,27 @@
 import React, {useState, useCallback, useEffect} from 'react';
 
 import update from 'immutability-helper'
-import PropTypes from 'prop-types';
 
 import style from './sorted-element.module.css'
 import dots from '../../images/dots.svg'
 
 import { useSelector, useDispatch } from 'react-redux';
 
-import { ingredientsShape } from '../../utils/prop-types';
-
+import { TItem } from '../../utils/types';
+//@ts-ignore
 import { v4 as uuid } from 'uuid'
 
 import { useDrop, useDrag } from "react-dnd";
 
 import { ConstructorElement } from '@ya.praktikum/react-developer-burger-ui-components'
 
-export default function SortedElement({ item, index}) {
-
+export default function SortedElement({item, index}: {item: TItem, index: number}) {
+  //@ts-ignore
   const constructorIngredientsList = useSelector(store => store.constructors.currentIngredientsList);
 
   const [cards, setCards] = useState([...constructorIngredientsList])
 
-  const ref = React.useRef(null)
+  const ref = React.useRef<HTMLDivElement>(null)
 
   const dispatch = useDispatch()
 
@@ -37,15 +36,18 @@ export default function SortedElement({ item, index}) {
       if (!ref.current) {
         return
       }
+      //@ts-ignore
       const dragIndex = item.index
       const hoverIndex = index
       if (dragIndex === hoverIndex) {
         return
       }
+      //@ts-ignore
       const hoverBoundingRect = ref.current?.getBoundingClientRect()
       const hoverMiddleY =
         (hoverBoundingRect.bottom - hoverBoundingRect.top) / 2
       const clientOffset = monitor.getClientOffset()
+      //@ts-ignore
       const hoverClientY = clientOffset.y - hoverBoundingRect.top
       if (dragIndex < hoverIndex && hoverClientY < hoverMiddleY) {
         return
@@ -54,10 +56,12 @@ export default function SortedElement({ item, index}) {
         return
       }
       moveCard(dragIndex, hoverIndex)
+      //@ts-ignore
       item.index = hoverIndex
     },
   })
 
+  //@ts-ignore
   const moveCard = useCallback((dragIndex, hoverIndex) => {
     setCards((prevCards) => 
       update(prevCards, {
@@ -88,8 +92,8 @@ const [{ isDragging }, drag] = useDrag({
   })
   drag(drop(ref))
 
-  const handleDeleteButton = (id, ingredientIndex) => {
-    dispatch({type: 'REMOVE_INGREDIENT_FROM_CURRENTS', item: constructorIngredientsList.filter((ingredient, index) => {
+  const handleDeleteButton = (id: string, ingredientIndex: number) => {
+    dispatch({type: 'REMOVE_INGREDIENT_FROM_CURRENTS', item: constructorIngredientsList.filter((ingredient: TItem, index: number) => {
       return ingredient._id !== id || index !== ingredientIndex})
     })
   }
@@ -98,7 +102,7 @@ const [{ isDragging }, drag] = useDrag({
     <div className={style.line} ref={ref}>
       <img src={dots} className='mr-2' alt=''/>
       <ConstructorElement
-        key={item.id}
+        key={item._id}
         isLocked={false}
         text={item.name}
         price={item.price}
@@ -107,9 +111,4 @@ const [{ isDragging }, drag] = useDrag({
       />
     </div>
   )
-}
-
-SortedElement.propTypes = {
-  item: ingredientsShape,
-  index: PropTypes.number.isRequired,
 }

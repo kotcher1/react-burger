@@ -1,14 +1,12 @@
 import React from 'react';
 
-import PropTypes from 'prop-types';
-
 import style from './app-header.module.css'
 
 import { Link } from 'react-router-dom';
 
 import { Logo, BurgerIcon, ProfileIcon, ListIcon } from '@ya.praktikum/react-developer-burger-ui-components'
 
-export default function AppHeader({active = ''}) {
+export default function AppHeader({active = ''}: {active: string}) {
 
   return (
     <header className={`${style.header} pl-10 pr-10 pt-10`}>
@@ -43,8 +41,4 @@ export default function AppHeader({active = ''}) {
       </div>
     </header>
   )
-}
-
-AppHeader.propTypes = {
-  active: PropTypes.string,
 }

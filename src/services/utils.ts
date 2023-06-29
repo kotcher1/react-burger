@@ -1,11 +1,16 @@
-export function getCookie(name) {
+export function getCookie(name: string) : string | undefined {
   const matches = document.cookie.match(
     new RegExp('(?:^|; )' + name.replace(/([\.$?*|{}\(\)\[\]\\\/\+^])/g, '\\$1') + '=([^;]*)')
   );
   return matches ? decodeURIComponent(matches[1]) : undefined;
 }
 
-export function setCookie(name, value, props) {
+type TCookieProps = {
+  expires?: any;
+  path?: string;
+};
+
+export function setCookie(name: string, value: any , props: TCookieProps) {
   props = props || {};
   let exp = props.expires;
   if (typeof exp == 'number' && exp) {
@@ -20,6 +25,7 @@ export function setCookie(name, value, props) {
   let updatedCookie = name + '=' + value;
   for (const propName in props) {
     updatedCookie += '; ' + propName;
+    // @ts-ignore
     const propValue = props[propName];
     if (propValue !== true) {
       updatedCookie += '=' + propValue;
@@ -28,6 +34,6 @@ export function setCookie(name, value, props) {
   document.cookie = updatedCookie;
 }
 
-export function deleteCookie(name) {
+export function deleteCookie(name: string) {
   setCookie(name, null, { expires: -1 });
 }

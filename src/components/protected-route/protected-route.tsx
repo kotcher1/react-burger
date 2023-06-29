@@ -2,10 +2,9 @@
 import { Navigate, useLocation } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 
-import PropTypes from 'prop-types';
+export const ProtectedRoute = ({element, type = ''}: {element: JSX.Element, type?: string}) => {
 
-export const ProtectedRoute = ({element, type = ''}) => {
-
+    //@ts-ignore
     const signIn = useSelector(store => store.user.signIn);
 
     const location = useLocation()
@@ -14,9 +13,4 @@ export const ProtectedRoute = ({element, type = ''}) => {
     const noLogin = signIn ? <Navigate to={location?.state?.from || '/'}/> : element
   
     return type === 'no-login' ? noLogin : login;
-}
-
-ProtectedRoute.propsType = {
-  element: PropTypes.element,
-  type: PropTypes.string,
 }
