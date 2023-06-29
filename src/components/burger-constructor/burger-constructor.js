@@ -1,4 +1,5 @@
 import React, {useState, useEffect} from 'react';
+import { useNavigate } from 'react-router-dom';
 
 import { ConstructorElement, CurrencyIcon, Button } from '@ya.praktikum/react-developer-burger-ui-components'
 import ModalOverlay from '../modal-overlay/modal-overlay';
@@ -16,25 +17,32 @@ export default function BurgerConstructor() {
 
   const [price, setPrice] = useState(0)
 
+  const navigation = useNavigate()
+
   const dispatch = useDispatch()
   const constructorIngredientsList = useSelector(store => store.constructors.currentIngredientsList);
   const ingredientsList = useSelector(store => store.ingredients.ingredientsList);
   const bunIngredient = useSelector(store => store.constructors.bunIngredient);
   const orderModalOpened = useSelector(store => store.modal.orderModalOpened);
+  const signIn = useSelector(store => store.user.signIn);
 
   const handleClick = () => {
-    const ingredients = []
-    constructorIngredientsList.map(item => {
-      return ingredients.push(item._id)
-    })
-    ingredients.push(bunIngredient._id)
-    ingredients.unshift(bunIngredient._id)
-    dispatch(addId(ingredients))
-    dispatch({
-      type: 'OPEN_MODAL',
-      product: false,
-      order: true.valueOf,
-    })
+    if(!signIn) {
+      navigation('/login')
+    } else {
+      const ingredients = []
+      constructorIngredientsList.map(item => {
+        return ingredients.push(item._id)
+      })
+      ingredients.push(bunIngredient._id)
+      ingredients.unshift(bunIngredient._id)
+      dispatch(addId(ingredients))
+      dispatch({
+        type: 'OPEN_MODAL',
+        product: false,
+        order: true.valueOf,
+      })
+    }
   }
 
   const [, dropTarget] = useDrop({

@@ -5,9 +5,12 @@ import style from './modal.module.css'
 import IngredientDetails from '../ingredient-details/ingredient-details';
 import OrderDetails from '../order-details/order-details';
 import { useDispatch } from 'react-redux'
+import { useNavigate } from 'react-router-dom';
 
 
 export default function Modal({type = ''}) {
+
+  const navigate = useNavigate()
 
   const dispatch = useDispatch()
 
@@ -36,6 +39,10 @@ export default function Modal({type = ''}) {
 
   const close = () => {
     dispatch({type: 'CLOSE_MODAL'})
+    dispatch({type: 'ADD_CURRENT_INGREDIENT', item: {}})
+    if(type === 'product') {
+      navigate('/')
+    }
   }
 
   return (

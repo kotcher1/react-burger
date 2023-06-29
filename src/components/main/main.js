@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import BurgerIngredients from '../burger-Ingredients/burger-Ingredients';
 import BurgerConstructor from '../burger-constructor/burger-constructor';
 
@@ -7,7 +7,15 @@ import { HTML5Backend } from "react-dnd-html5-backend";
 
 import style from './main.module.css'
 
-export default function Main() {
+import { navLinkFunction } from '../../utils/prop-types'
+
+
+export default function Main({changeNav}) {
+
+  useEffect(() => {
+    changeNav('constructor')
+  }, [])
+
   return (
     <main className={`${style.main} pb-10`}>
       <DndProvider backend={HTML5Backend}>
@@ -17,3 +25,5 @@ export default function Main() {
     </main>
   )
 }
+
+Main.propsType = navLinkFunction

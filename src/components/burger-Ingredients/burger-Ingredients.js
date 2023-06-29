@@ -20,6 +20,8 @@ export default function BurgerIngredients() {
   const dispatch = useDispatch()
 
   const ingredientsList = useSelector(store => store.ingredients.ingredientsList);
+  const productModalOpened = useSelector(state => state.modal.productModalOpened);
+  const currentIngredient = useSelector(store => store.ingredients.currentIngredient)
 
   useEffect(() => {
     const tabTop = tabs.current.getBoundingClientRect().top + 200;
@@ -89,8 +91,7 @@ export default function BurgerIngredients() {
             })}
           </div>
         </div>
-      </div>    
-
+      </div>
     </section>
   )
 }

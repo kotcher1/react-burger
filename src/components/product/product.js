@@ -1,11 +1,12 @@
-import React from 'react';
+import React, {useEffect} from 'react';
+
+import { Link, useLocation } from 'react-router-dom';
 
 import { Counter, CurrencyIcon } from '@ya.praktikum/react-developer-burger-ui-components'
 
 import { infoRules } from '../../utils/prop-types';
 
 import style from './product.module.css'
-import ModalOverlay from '../modal-overlay/modal-overlay';
 
 import { useDrag } from "react-dnd";
 import { useSelector, useDispatch } from 'react-redux';
@@ -16,17 +17,20 @@ export default function Product({info}) {
 
   const dispatch = useDispatch()
 
-
   const [count, setCount] = React.useState(0);
 
   const currentIngredients = useSelector(state => state.constructors.currentIngredientsList)
   const bunIngredient = useSelector(state => state.constructors.bunIngredient)
-  const productModalOpened = useSelector(state => state.modal.productModalOpened)
+
+  const currentIngredient = useSelector(store => store.ingredients.currentIngredient)
+
 
   const handleIngredientClick = () => {
     dispatch({type: 'ADD_CURRENT_INGREDIENT', item: info})
     dispatch({type: 'OPEN_MODAL', product: true, order: false})
   }
+
+  const location = useLocation()
 
   const [, dragRef] = useDrag({
     type: "product",
@@ -41,11 +45,12 @@ export default function Product({info}) {
     setCount(bunsFilter ? 2 : ingredientsFilterLength)
   }, [currentIngredients, count, bunIngredient])
 
-
-
-
   return (
-    <>
+    <Link
+      className={style.link}
+      to={`/ingredients/${info._id}`}
+      state={{ backgroundLocation: location }}
+    >
     <div className={`${style.card} mt-6`} onClick={handleIngredientClick} ref={dragRef}>
       <img src={info.image} alt="Product">
       </img>
@@ -60,10 +65,7 @@ export default function Product({info}) {
       </p>
       {count > 0 && <Counter count={count}/>}
     </div>
-      {productModalOpened && (
-        <ModalOverlay info={info} type="product" />
-      )}
-    </>
+    </Link>
   )
 }
 
