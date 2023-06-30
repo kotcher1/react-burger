@@ -55,9 +55,8 @@ export default function BurgerConstructor() {
 
   const [, dropTarget] = useDrop({
     accept: "product",
-    drop(itemId) {
+    drop: (itemId: {_id: string}) => {
       const item = ingredientsList.filter((ingredient: TItem) => {
-        // @ts-ignore
         return ingredient._id === itemId._id})
       if(item[0].type !== 'bun') {
         dispatch({type: 'ADD_INGREDIENT_TO_CURRENTS', item

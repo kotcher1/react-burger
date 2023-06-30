@@ -27,27 +27,24 @@ export default function SortedElement({item, index}: {item: TItem, index: number
 
   const [{ handlerId }, drop] = useDrop({
     accept: 'constructorItem',
-    collect(monitor) {
+    collect: monitor => {
       return {
         handlerId: monitor.getHandlerId(),
       }
     },
-    hover(item, monitor) {
+    hover: (item: {id: string, index: number}, monitor: any) => {
       if (!ref.current) {
         return
       }
-      //@ts-ignore
       const dragIndex = item.index
       const hoverIndex = index
       if (dragIndex === hoverIndex) {
         return
       }
-      //@ts-ignore
       const hoverBoundingRect = ref.current?.getBoundingClientRect()
       const hoverMiddleY =
         (hoverBoundingRect.bottom - hoverBoundingRect.top) / 2
       const clientOffset = monitor.getClientOffset()
-      //@ts-ignore
       const hoverClientY = clientOffset.y - hoverBoundingRect.top
       if (dragIndex < hoverIndex && hoverClientY < hoverMiddleY) {
         return
@@ -56,13 +53,11 @@ export default function SortedElement({item, index}: {item: TItem, index: number
         return
       }
       moveCard(dragIndex, hoverIndex)
-      //@ts-ignore
       item.index = hoverIndex
     },
   })
 
-  //@ts-ignore
-  const moveCard = useCallback((dragIndex, hoverIndex) => {
+  const moveCard = useCallback((dragIndex: number, hoverIndex: number) => {
     setCards((prevCards) => 
       update(prevCards, {
         $splice: [

@@ -78,13 +78,11 @@ export default function BurgerIngredients() {
           <div className={`${style.block} pl-4 pr-4`}>
             {ingredientsList.map((item: TItem) => {
               if(item.type === 'sauce') {
-                {/*@ts-ignore*/ }
                 return <Product info={item} key={item._id}/>
               }
             })}
           </div>
         </div>
-        {/*@ts-ignore*/ }
         <div className={`${style.productSection}  mt-10`} ref={thirdChapter}>
           <p className={`${style.containerTitle} m-0 text_type_main-medium`}>
             Начинки
@@ -92,7 +90,6 @@ export default function BurgerIngredients() {
           <div className={`${style.block} pl-4 pr-4`}>
             {ingredientsList.map((item: TItem) => {
               if(item.type === 'main') {
-                {/*@ts-ignore*/ }
                 return <Product info={item} key={item._id}/>
               }
             })}

@@ -4,7 +4,7 @@ import { EmailInput, PasswordInput, Input, Button } from '@ya.praktikum/react-de
 
 import styles from '../form/form.module.css'
 
-import { useSelector, useDispatch } from 'react-redux'
+import { useDispatch } from 'react-redux'
 
 import { register } from '../../services/actions/register'
 

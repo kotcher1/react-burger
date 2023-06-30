@@ -6,8 +6,9 @@ export function getCookie(name: string) : string | undefined {
 }
 
 type TCookieProps = {
-  expires?: any;
+  expires?: Date | string | number;
   path?: string;
+  [propName: string]: any;
 };
 
 export function setCookie(name: string, value: any , props: TCookieProps) {
@@ -18,14 +19,13 @@ export function setCookie(name: string, value: any , props: TCookieProps) {
     d.setTime(d.getTime() + exp * 1000);
     exp = props.expires = d;
   }
-  if (exp && exp.toUTCString) {
+  if (exp && exp instanceof Date) {
     props.expires = exp.toUTCString();
   }
   value = encodeURIComponent(value);
   let updatedCookie = name + '=' + value;
   for (const propName in props) {
     updatedCookie += '; ' + propName;
-    // @ts-ignore
     const propValue = props[propName];
     if (propValue !== true) {
       updatedCookie += '=' + propValue;
