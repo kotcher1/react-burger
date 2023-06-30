@@ -3,6 +3,7 @@ import {
   REMOVE_INGREDIENT_FROM_CURRENTS,
   ADD_BUN,
   SORT_CURRENT_INGREDIENT,
+  SET_INGREDIENTS,
 } from '../actions/constructor'
 
 const initialState = {
@@ -34,6 +35,12 @@ export const constructorReducer = (state = initialState, action) => {
       return {
         ...state,
         currentIngredientsList: action.list
+      }
+    }
+    case SET_INGREDIENTS: {
+      return {
+        ...state,
+        currentIngredientsList: action.list,
       }
     }
     default: {

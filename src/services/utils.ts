@@ -1,4 +1,4 @@
-export function getCookie(name: string) : string | undefined {
+export function getCookie(name: string): string | undefined {
   const matches = document.cookie.match(
     new RegExp('(?:^|; )' + name.replace(/([\.$?*|{}\(\)\[\]\\\/\+^])/g, '\\$1') + '=([^;]*)')
   );
@@ -12,6 +12,8 @@ type TCookieProps = {
 };
 
 export function setCookie(name: string, value: any , props: TCookieProps) {
+  console.log('here')
+  console.log(props)
   props = props || {};
   let exp = props.expires;
   if (typeof exp == 'number' && exp) {
