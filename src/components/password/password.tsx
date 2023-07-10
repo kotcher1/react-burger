@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, ChangeEvent, FormEvent} from 'react';
 
 import { Navigate } from 'react-router-dom';
 
@@ -10,11 +10,14 @@ import { useSelector, useDispatch } from 'react-redux'
 
 import { resetPassword } from '../../services/actions/user'
 
-import { navLinkFunction } from '../../utils/prop-types'
+interface IPasswordInfo {
+  password: string;
+  token: string;
+}
 
-export default function Password({changeNav}) {
+export default function Password({changeNav} : {changeNav : (val: string) => void}) {
 
-  const [newPasswordInfo, setInfo] = useState({
+  const [newPasswordInfo, setInfo] = useState<IPasswordInfo>({
     password: '',
     token: '',
   })
@@ -25,17 +28,19 @@ export default function Password({changeNav}) {
     changeNav('')
   }, [])
 
-  function handleChangeInput(e) {
+  function handleChangeInput(e: ChangeEvent<HTMLInputElement>) {
     setInfo(prevState => {
       return {...prevState, [e.target.name]: e.target.value}
     })
   }
 
-  function handleSubmit(e) {
+  function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
+    //@ts-ignore
     dispatch(resetPassword(newPasswordInfo))
   }
 
+  //@ts-ignore
   const passwordReset = useSelector(state => state.user.passwordReset)
 
   return !passwordReset ? (
@@ -77,5 +82,3 @@ export default function Password({changeNav}) {
     <Navigate to="/login"/>
   )
 }
-
-Password.propsType = navLinkFunction

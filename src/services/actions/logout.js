@@ -1,4 +1,4 @@
-import { logoutRequest } from '../api.js'
+import { logoutRequest } from '../api'
 import { deleteCookie, getCookie } from '../utils';
 
 export const LOGOUT_REQUEST = 'LOGOUT_REQUEST';

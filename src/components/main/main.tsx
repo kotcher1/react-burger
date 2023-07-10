@@ -7,10 +7,7 @@ import { HTML5Backend } from "react-dnd-html5-backend";
 
 import style from './main.module.css'
 
-import { navLinkFunction } from '../../utils/prop-types'
-
-
-export default function Main({changeNav}) {
+export default function Main({changeNav}: {changeNav: (val: string) => void}) {
 
   useEffect(() => {
     changeNav('constructor')
@@ -25,5 +22,3 @@ export default function Main({changeNav}) {
     </main>
   )
 }
-
-Main.propsType = navLinkFunction

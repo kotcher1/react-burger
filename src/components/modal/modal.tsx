@@ -1,5 +1,4 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import { CloseIcon } from '@ya.praktikum/react-developer-burger-ui-components'
 import style from './modal.module.css'
 import IngredientDetails from '../ingredient-details/ingredient-details';
@@ -7,8 +6,11 @@ import OrderDetails from '../order-details/order-details';
 import { useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom';
 
+interface KeyboardEvent {
+  key: string;
+}
 
-export default function Modal({type = ''}) {
+export default function Modal({type = ''}: {type?: string}) {
 
   const navigate = useNavigate()
 
@@ -25,13 +27,17 @@ export default function Modal({type = ''}) {
 
   }, []);
 
-  const closeModal = (e) => {
-    if(e.target.dataset.value === 'back') {
+  const closeModal = (e: Event): void => {
+    if (!e.target)
+      return
+
+    const target = e.target as Element
+    if(target.classList.contains('back')) {
       close()
     }
   }
 
-  const handleKeyPress = (e) => {
+  const handleKeyPress = (e: KeyboardEvent): void => {
     if(e.key === 'Escape') {
       close()
     }
@@ -54,7 +60,3 @@ export default function Modal({type = ''}) {
     </div>
   )
 }
-
-Modal.propTypes = {
-  type: PropTypes.string,
-}; 

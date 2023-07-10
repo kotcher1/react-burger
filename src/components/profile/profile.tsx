@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, ChangeEvent} from 'react';
 
 import { EmailInput, PasswordInput, Input, Button } from '@ya.praktikum/react-developer-burger-ui-components'
 
@@ -12,22 +12,30 @@ import { changeUser } from '../../services/actions/user'
 
 import { Link, useParams } from 'react-router-dom';
 
-import { navLinkFunction } from '../../utils/prop-types'
+interface IUser {
+  name: string;
+  email: string;
+  password: string;
+}
 
-export default function Profile({changeNav}) {
+export default function Profile({changeNav}: {changeNav : (val: string) => void}) {
 
+  //@ts-ignore
   const userName = useSelector((state) => state.user.name)
+  //@ts-ignore
   const userEmail = useSelector((state) => state.user.email)
+  //@ts-ignore
   const userPassword = useSelector((state) => state.user.password)
+  //@ts-ignore
   const accessToken = useSelector((state) => state.user.accessToken)
 
-  const [form, setFormValue] = useState({
+  const [form, setFormValue] = useState<IUser>({
     name: userName,
     email: userEmail,
     password: userPassword,
   })
 
-  const [buttonsState, setButtonsState] = useState(false)
+  const [buttonsState, setButtonsState] = useState<boolean>(false)
 
   const dispatch = useDispatch();
 
@@ -36,10 +44,11 @@ export default function Profile({changeNav}) {
   }, [])
 
   function clickLogoutButton() {
+    //@ts-ignore
     dispatch(logout())
   }
 
-  function handleChange(e) {
+  function handleChange(e: ChangeEvent<HTMLInputElement>) {
     setButtonsState(true);
     setFormValue(prevState => {
       return {...prevState, [e.target.name]: e.target.value}
@@ -47,6 +56,7 @@ export default function Profile({changeNav}) {
   }
 
   function handleClickSave() {
+    //@ts-ignore
     dispatch(changeUser(form, accessToken))
     setButtonsState(false)
   }
@@ -98,7 +108,7 @@ export default function Profile({changeNav}) {
             placeholder="E-mail" 
             name={'email'} 
             extraClass="mt-6"
-            icon={'EditIcon'}
+            isIcon={true}
             value={form.email}
             onChange={handleChange}
           />
@@ -127,5 +137,3 @@ export default function Profile({changeNav}) {
     </div>
   )
 }
-
-Profile.propsType = navLinkFunction

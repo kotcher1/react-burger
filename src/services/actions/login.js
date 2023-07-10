@@ -1,4 +1,4 @@
-import { loginRequest } from '../api.js'
+import { loginRequest } from '../api'
 import { setCookie } from '../utils';
 
 export const LOGIN_REQUEST = 'LOGIN_REQUEST';

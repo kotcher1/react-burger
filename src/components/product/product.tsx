@@ -4,26 +4,24 @@ import { Link, useLocation } from 'react-router-dom';
 
 import { Counter, CurrencyIcon } from '@ya.praktikum/react-developer-burger-ui-components'
 
-import { infoRules } from '../../utils/prop-types';
+import {TItem} from '../../utils/types'
 
 import style from './product.module.css'
 
 import { useDrag } from "react-dnd";
 import { useSelector, useDispatch } from 'react-redux';
 
-export default function Product({info}) {
+export default function Product({info}: {info: TItem, index?: number}) {
 
   const {_id} = info;
 
   const dispatch = useDispatch()
 
-  const [count, setCount] = React.useState(0);
-
+  const [count, setCount] = React.useState<number>(0);
+  // @ts-ignore
   const currentIngredients = useSelector(state => state.constructors.currentIngredientsList)
+  // @ts-ignore
   const bunIngredient = useSelector(state => state.constructors.bunIngredient)
-
-  const currentIngredient = useSelector(store => store.ingredients.currentIngredient)
-
 
   const handleIngredientClick = () => {
     dispatch({type: 'ADD_CURRENT_INGREDIENT', item: info})
@@ -38,7 +36,7 @@ export default function Product({info}) {
   });
 
   React.useEffect(() => {
-    const ingredientsFilterLength = currentIngredients.filter(item => {
+    const ingredientsFilterLength = currentIngredients.filter((item: TItem) => {
       return item._id === info._id
     }).length
     const bunsFilter = bunIngredient._id === info._id
@@ -58,7 +56,7 @@ export default function Product({info}) {
         <p className={`${style.price} mr-2 text_type_digits-default`}>
           {info.price}
         </p>
-        <CurrencyIcon />
+        <CurrencyIcon type={'primary'}/>
       </div>
       <p className={`${style.productName} mt-1 text_type_main-default`}>
         {info.name}
@@ -68,6 +66,4 @@ export default function Product({info}) {
     </Link>
   )
 }
-
-Product.propTypes = infoRules
 

@@ -17,25 +17,26 @@ import { getUser } from '../../services/actions/user'
 import { getCookie } from '../../services/utils'
 import IngredientDetails from '../ingredient-details/ingredient-details';
 
+import { TStore } from '../../utils/types'
+
 
 function App() {
 
   const location = useLocation();
 
-  const [activeNavLink, setActiveNavLink] = useState('')
+  const [activeNavLink, setActiveNavLink] = useState<string>('')
 
   const dispatch = useDispatch();
 
-  function changeNavLink(string) {
-    setActiveNavLink(string)
+  function changeNavLink(val: string): void {
+    setActiveNavLink(val)
   }
 
   const state = location.state;
 
-  const currentIngredient = useSelector(store => store.ingredients.currentIngredient);
-
   useEffect(() => {
-    if(getCookie('accessToken') && getCookie('accessToken').length > 0) {
+    if(getCookie('accessToken') && typeof getCookie('accessToken') === 'string') {
+       // @ts-ignore
       dispatch(getUser(getCookie('accessToken')))
       dispatch({type: 'SET_SIGNIN'})
     }
@@ -60,7 +61,7 @@ function App() {
       </Routes>
       {state?.backgroundLocation && (
         <Routes>
-          <Route path="/ingredients/:id" element={<ModalOverlay info={currentIngredient} type="product" />} />
+          <Route path="/ingredients/:id" element={<ModalOverlay type="product" />} />
         </Routes>
       )}
     </div>

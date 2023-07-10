@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, ChangeEvent, FormEvent} from 'react';
 
 import { EmailInput, Button } from '@ya.praktikum/react-developer-burger-ui-components'
 
@@ -9,11 +9,9 @@ import { useSelector, useDispatch } from 'react-redux'
 import { forgotPassword } from '../../services/actions/user'
 import { Navigate } from 'react-router-dom';
 
-import { navLinkFunction } from '../../utils/prop-types'
+export default function ForgotPassword({changeNav}: {changeNav: (val :string) => void}) {
 
-export default function ForgotPassword({changeNav}) {
-
-  const [email, setEmail] = useState('')
+  const [email, setEmail] = useState<string>('')
 
   const dispatch = useDispatch();
 
@@ -21,15 +19,18 @@ export default function ForgotPassword({changeNav}) {
     changeNav('')
   }, [])
 
-  function handleInputChange(e) {
+  function handleInputChange(e: ChangeEvent<HTMLInputElement>) {
     setEmail(e.target.value)
   }
 
-  function handleSubmit(e) {
+  
+  function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
+    // @ts-ignore
     dispatch(forgotPassword(email))
   }
 
+  // @ts-ignore
   const passwordRequest = useSelector(state => state.user.passwordRequest)
 
   return !passwordRequest ? (
@@ -53,5 +54,3 @@ export default function ForgotPassword({changeNav}) {
     <Navigate to={"/reset-password"}/>
   )
 }
-
-ForgotPassword.propsType = navLinkFunction

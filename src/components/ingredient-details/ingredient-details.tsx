@@ -7,16 +7,17 @@ import {useSelector, useDispatch} from 'react-redux'
 import { useParams } from 'react-router-dom';
 import { addIngredients } from '../../services/actions/products'
 
-import { navLinkFunction } from '../../utils/prop-types'
+import { TItem } from '../../utils/types'
 
-export default function IngredientDetails({changeNav}) {
+export default function IngredientDetails({changeNav}: {changeNav?: (val: string) => void}) {
 
   const dispatch = useDispatch()
-
+  // @ts-ignore
   const ingredients = useSelector(store => store.ingredients.ingredientsList)
 
   useEffect(() => {
     if(ingredients.length === 0) {
+      // @ts-ignore
       dispatch(addIngredients())
     }
     if(changeNav) {
@@ -26,14 +27,15 @@ export default function IngredientDetails({changeNav}) {
 
   useEffect(() => {
     if(ingredients.length === 0) {
+      // @ts-ignore
       dispatch(addIngredients())
     }
   }, [ingredients])
 
   const {id} = useParams()
-
+  // @ts-ignore
   const currentIngredient = useSelector(store => store.ingredients.currentIngredient)
-  const idIngredient = ingredients.find(element => element._id === id)
+  const idIngredient = ingredients.find((element: TItem) => element._id === id)
 
  
 
@@ -87,5 +89,3 @@ export default function IngredientDetails({changeNav}) {
     </div>
   )
 }
-
-IngredientDetails.propsType = navLinkFunction

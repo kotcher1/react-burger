@@ -4,7 +4,7 @@ import {
   getTokenRequest, 
   getUserRequest, 
   updateUserRequest 
-} from '../api.js'
+} from '../api'
 import { getCookie, setCookie } from '../utils';
 
 export const SET_USER_INFORMATION = 'SET_USER_INFORMATION'
