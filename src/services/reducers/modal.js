@@ -1,7 +1,7 @@
 import {  
   OPEN_MODAL,
   CLOSE_MODAL,
-} from '../actions/modal'
+} from '../constants/modal'
 
 const initialState = {
   productModalOpened: false,

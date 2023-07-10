@@ -4,7 +4,7 @@ import {
   ADD_BUN,
   SORT_CURRENT_INGREDIENT,
   SET_INGREDIENTS,
-} from '../actions/constructor'
+} from '../constants/constructor'
 
 const initialState = {
   bunIngredient: '',

@@ -1,4 +1,4 @@
-import { CustomResponse, TResponseBody, TUser } from "../utils/types";
+import { CustomResponse, TResponseBody, TUser, TItem } from "../utils/types";
 
 const url = 'https://norma.nomoreparties.space/api'
 
@@ -131,3 +131,21 @@ Promise<CustomResponse<TResponseBody>> => {
   .then(res => res.json())
   .catch(err => console.log(err))
 };
+
+export const setOrder = async (ingredients: Array<TItem>, func: any):
+Promise<CustomResponse<TResponseBody>> => {
+  return await fetch(`${url}/api/orders`, {
+    method: 'POST',
+    mode: 'cors',
+    cache: 'no-cache',
+    credentials: 'same-origin',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    redirect: 'follow',
+    referrerPolicy: 'no-referrer',
+    body: JSON.stringify({ingredients})
+  })
+  .then(res => res.json())
+  .catch(err => func())
+}

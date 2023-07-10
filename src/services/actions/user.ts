@@ -7,15 +7,49 @@ import {
 } from '../api'
 import { getCookie, setCookie } from '../utils';
 
-export const SET_USER_INFORMATION = 'SET_USER_INFORMATION'
-export const PASSWORD_REQUEST = 'PASSWORD_REQUEST'
-export const PASSWORD_RESET = 'PASSWORD_RESET'
-export const USER_LOGOUT = 'USER_LOGOUT'
-export const SET_PASSWORD = 'SET_PASSWORD'
-export const SET_TOKEN = 'SET_TOKEN'
-export const SET_SIGNIN = 'SET_SIGNIN'
+import {
+  SET_USER_INFORMATION,
+  PASSWORD_REQUEST,
+  PASSWORD_RESET,
+  USER_LOGOUT,
+  SET_PASSWORD,
+  SET_TOKEN,
+  SET_SIGNIN,
+} from '../constants/user'
 
-export function getUser(accessToken) {
+export interface ISetUserInformation {
+  readonly type: typeof SET_USER_INFORMATION;
+  readonly name: string,
+  readonly email: string,
+  readonly accessToken: string,
+}
+
+export interface ISetPassword {
+  readonly type: typeof SET_PASSWORD;
+  readonly password: string,
+}
+
+export interface IUserLogout {
+  readonly type: typeof USER_LOGOUT;
+}
+
+export const setUserInformation = (name: string, email: string, accessToken: string): ISetUserInformation => ({
+  type: SET_USER_INFORMATION,
+  name,
+  email,
+  accessToken,
+});
+
+export const setPassword = (password: string): ISetPassword => ({
+  type: SET_PASSWORD,
+  password,
+})
+
+export const userLogout = (): IUserLogout => ({
+  type: USER_LOGOUT,
+})
+
+export function getUser(accessToken: string): any {
   return function(dispatch) {
     fetchWithRefresh(getUserRequest, accessToken)
     .catch((err) => {
