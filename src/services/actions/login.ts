@@ -10,6 +10,8 @@ import {
   setPassword,
 } from '../actions/user'
 
+import { AppDispatch } from '../types/index'
+
 export interface IGetLoginAction {
   readonly type: typeof LOGIN_REQUEST;
 }
@@ -39,7 +41,7 @@ export const getLoginSuccesAction = (): IGetLoginSuccessAction => ({
 });
 
 export const login = ({email, password}: {email: string, password: string}): any => {
-  return function(dispatch: any) {
+  return function(dispatch: AppDispatch) {
     dispatch(getLoginRequestAction());
     loginRequest({email, password})
     .then(res => res.json())

@@ -6,6 +6,7 @@ import {
   GET_INGREDIENTS_FAILED,
   ADD_CURRENT_INGREDIENT,
 } from '../constants/products'
+import { AppDispatch } from '../types';
 
 import {
   TItem,
@@ -54,7 +55,7 @@ export const addCurrentIngredient = (item: TItem): IAddCurrentIngredient => ({
 
 
 export const addIngredients = (): any => {
-  return function(dispatch: any) {
+  return function(dispatch: AppDispatch) {
     dispatch(getIngredientsRequest());
     getIngredients
     .catch(err => {

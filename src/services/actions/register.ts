@@ -12,6 +12,8 @@ import {
   setPassword,
 } from './user'
 
+import { AppDispatch } from '../types/index'
+
 export interface IGetRegisterRequest {
   readonly type: typeof REGISTER_REQUEST;
 }
@@ -41,7 +43,7 @@ export const getRegisterRequest = (): IGetRegisterRequest => ({
 });
 
 export const register = ({name, email, password}: {name: string, email: string, password: string}): any => {
-  return function(dispatch: any) {
+  return function(dispatch: AppDispatch) {
     dispatch(getRegisterRequest());
     createUser({name, email, password})
     .then(res => res.json())

@@ -13,6 +13,8 @@ import {
 
 import { setOrder } from '../api';
 
+import { AppDispatch } from '../types/index'
+
 export interface IGetOrderIdRequest {
   readonly type: typeof GET_ORDER_ID_REQUEST;
 }
@@ -53,7 +55,7 @@ export const resetOrder = (): IResetOrder => ({
 });
 
 export const addId = (ingredients: Array<String>): any => {
-  return function(dispatch: any) {
+  return function(dispatch: AppDispatch) {
     dispatch(getOrderIdRequest());
     setOrder(ingredients)
     .catch(err => dispatch(getOrderIdFailed()))

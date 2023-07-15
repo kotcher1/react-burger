@@ -16,6 +16,8 @@ import {
   SET_SIGNIN,
 } from '../constants/user'
 
+import { AppDispatch } from '../types/index'
+
 export interface ISetUserInformation {
   readonly type: typeof SET_USER_INFORMATION;
   readonly name: string,
@@ -80,7 +82,7 @@ export const setSignin = (): ISetSignin => ({
 })
 
 export const getUser = (accessToken: string): any => {
-  return function(dispatch: any) {
+  return function(dispatch: AppDispatch) {
     fetchWithRefresh(getUserRequest, accessToken)
     .catch((err) => {
       console.log(err)
@@ -97,7 +99,7 @@ export const getUser = (accessToken: string): any => {
 }
 
 export const changeUser = (form: {name: string, email: string, password: string}, accessToken: string): any => {
-  return function(dispatch: any) {
+  return function(dispatch: AppDispatch) {
     fetchWithRefresh(updateUserRequest, accessToken, form)
     .catch((err) => {
       console.log(err)
@@ -116,7 +118,7 @@ export const changeUser = (form: {name: string, email: string, password: string}
 
 
 export const forgotPassword = (email: string): any => {
-  return function(dispatch: any) {
+  return function(dispatch: AppDispatch) {
     forgotPasswordRequest(email)
     .then(res => res.json())
     .catch((err) => {
@@ -131,7 +133,7 @@ export const forgotPassword = (email: string): any => {
 };
 
 export const resetPassword = (form: {password: string, token: string}): any => {
-  return function(dispatch: any) {
+  return function(dispatch: AppDispatch) {
     changePasswordRequest(form)
     .then(res => res.json())
     .catch((err) => {
@@ -145,7 +147,7 @@ export const resetPassword = (form: {password: string, token: string}): any => {
   }
 };
 
-const checkResponse = (res: any) => {
+const checkResponse = (res: Response) => {
   return res.ok ? res.json() : res.json().then((err: any) => Promise.reject(err));
 };
 
@@ -158,11 +160,8 @@ const fetchWithRefresh = async (fc: any, accessToken: string, form?: {email: str
       const cookie = getCookie('token')
       if (cookie && typeof cookie === 'string') {
         const refreshData = await getTokenRequest({token: cookie});
-        //@ts-ignore
         setCookie('token', refreshData.refreshToken, {path: '/'})
-        //@ts-ignore
         setCookie('accessToken', refreshData.accessToken, {path: '/'})
-        //@ts-ignore
         const res = await fc(refreshData.accessToken, form);
         return await checkResponse(res);
       }

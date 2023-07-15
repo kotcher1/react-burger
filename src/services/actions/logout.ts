@@ -12,6 +12,8 @@ import {
   userLogout,
 } from '../actions/user'
 
+import { AppDispatch } from '../types/index'
+
 export interface IGetLogoutAction {
   readonly type: typeof LOGOUT_REQUEST;
 }
@@ -41,7 +43,7 @@ export const getLogoutSuccesAction = (): IGetLogoutSuccessAction => ({
 });
 
 export const logout = (): any => {
-  return function(dispatch: any) {
+  return function(dispatch: AppDispatch) {
     dispatch(getLogoutRequestAction());
     const token = getCookie('token')
     if(typeof token == 'string' && token) {

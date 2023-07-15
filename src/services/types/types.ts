@@ -84,6 +84,9 @@ export interface IMessageResponse {
 
   id?: string;
   isBot?: boolean;
+  
+  accessToken?: string,
+  refreshToken?: string,
 }
 
 export type TOrderItem = {
