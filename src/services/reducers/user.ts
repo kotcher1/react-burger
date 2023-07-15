@@ -4,11 +4,24 @@ import {
   PASSWORD_RESET,
   USER_LOGOUT,
   SET_PASSWORD,
-  SET_TOKEN,
   SET_SIGNIN,
+} from '../constants/user'
+
+import {
+  TUserActions
 } from '../actions/user'
 
-const initialState = {
+type TUserState = {
+  email: string,
+  name: string,
+  accessToken: string,
+  signIn: boolean,
+  passwordRequest: boolean,
+  passwordReset: boolean,
+  password: string,
+}
+
+const initialState: TUserState = {
   email: '',
   name: '',
   accessToken: '',
@@ -18,7 +31,7 @@ const initialState = {
   password: '',
 }
 
-export const userReducer = (state = initialState, action) => {
+export const userReducer = (state = initialState, action: TUserActions): TUserState => {
   switch (action.type) {
     case SET_USER_INFORMATION: {
       return {
@@ -55,16 +68,9 @@ export const userReducer = (state = initialState, action) => {
         signIn: false,
       }
     }
-    case SET_TOKEN: {
-      return {
-        ...state,
-        accessToken: action.accessToken,
-      }
-    }
     case SET_SIGNIN: {
       return {
         ...state,
-        accessToken: action.accessToken,
       }
     }
     default: {

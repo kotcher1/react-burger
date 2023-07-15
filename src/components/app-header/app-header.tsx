@@ -1,5 +1,3 @@
-import React from 'react';
-
 import style from './app-header.module.css'
 
 import { Link } from 'react-router-dom';
@@ -20,12 +18,14 @@ export default function AppHeader({active = ''}: {active: string}) {
               </p>
             </div>
           </Link>
-          <a className={`${style.button} p-5 ml-2`}>
-            <ListIcon type={active === 'list' ? 'primary' : 'secondary'}/>
-            <p className={`${active === 'list' ? style.buttonTitle : 'text_color_inactive'} text_type_main-small pl-2`}>
-              Лента заказов
-            </p>
-          </a>
+          <Link className={style.link} to="/feed">
+            <div className={`${style.button} p-5`}>
+              <ListIcon type={active === 'list' ? 'primary' : 'secondary'}/>
+              <p className={`${active === 'list' ? style.buttonTitle : 'text_color_inactive'} text_type_main-small pl-2`}>
+                Лента заказов
+              </p>
+            </div>
+          </Link>
         </div>
         <Logo/>
         <div className={style.userButton}>

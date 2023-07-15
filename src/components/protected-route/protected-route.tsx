@@ -1,10 +1,9 @@
 
 import { Navigate, useLocation } from 'react-router-dom';
-import { useSelector } from 'react-redux';
+import { useSelector } from '../../services/hooks';
 
 export const ProtectedRoute = ({element, type = ''}: {element: JSX.Element, type?: string}) => {
 
-    //@ts-ignore
     const signIn = useSelector(store => store.user.signIn);
 
     const location = useLocation()

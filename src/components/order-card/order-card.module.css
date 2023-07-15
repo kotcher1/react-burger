@@ -1,0 +1,98 @@
+.orderCard {
+  width: 100%;
+  border-radius: 40px;
+  background-color: #1C1C21;
+  box-shadow: 0px 0px 1px rgba(0, 0, 0, 0.04), 0px 0px 2px rgba(0, 0, 0, 0.06), 0px 4px 8px 0px rgba(0, 0, 0, 0.04);
+  box-sizing: border-box;
+  text-decoration: none;
+  display: block;
+}
+
+.orderCard:nth-child(n+2) {
+  margin-top: 24px;
+}
+
+.numberLine {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.orderNumber {
+  color: white;
+  text-decoration: none;
+}
+
+.orderName {
+  text-align: left;
+  color: white;
+}
+
+.ingredientsLine {
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.ingredientsBox {
+  display: flex;
+  flex-direction: row-reverse;
+}
+
+.boxGradient {
+  border-radius: 50%;
+  width: 64px;
+  height: 64px;
+  padding: 1px;
+  background: linear-gradient(45deg, rgba(128,26,178,1) 0%, rgba(76,76,255,1) 100%);
+  z-index: 1;
+  overflow: hidden;
+}
+
+.boxGradient:not(:last-child) {
+  margin-left: -16px;
+}
+
+.ingredientImageContainer {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  background: #131316;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+  position: relative;
+}
+
+.ingredientImage {
+  max-width: 150%;
+  height: auto;
+}
+
+.mask {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  top: 0;
+  left: 0;
+  background-color: rgba(28, 28, 33, 0.6);
+}
+
+.maskTitle {
+  color: white;
+}
+
+.priceBlock {
+  display: flex;
+  align-items: center;
+}
+
+.price {
+  color: white;
+}

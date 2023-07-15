@@ -40,8 +40,8 @@ export const getLogoutSuccesAction = (): IGetLogoutSuccessAction => ({
   type: LOGOUT_SUCCESS,
 });
 
-export function logout() {
-  return function(dispatch) {
+export const logout = (): any => {
+  return function(dispatch: any) {
     dispatch(getLogoutRequestAction());
     const token = getCookie('token')
     if(typeof token == 'string' && token) {

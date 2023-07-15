@@ -11,7 +11,7 @@ type TCookieProps = {
   [propName: string]: any;
 };
 
-export function setCookie(name: string, value: any , props: TCookieProps) {
+export function setCookie(name: string, value: any, props: TCookieProps) {
   props = props || {};
   let exp = props.expires;
   if (typeof exp == 'number' && exp) {

@@ -3,17 +3,41 @@ import {
   GET_INGREDIENTS_SUCCESS,
   GET_INGREDIENTS_FAILED,
   ADD_CURRENT_INGREDIENT,
-  REMOVE_CURRENT_INGREDIENT,
-} from '../actions/products'
+} from '../constants/products'
 
-const initialState = {
+import {
+  TProductsActions
+} from '../actions/products'
+import { TItem } from '../types/types'
+
+type TProductsStore = {
+  ingredientsList: TItem[],
+  currentIngredient: TItem,
+  ingredientsRequest: boolean,
+  ingredientsFailed: boolean,
+}
+
+const initialState: TProductsStore = {
   ingredientsList: [],
-  currentIngredient: {},
+  currentIngredient: {
+    _id: '',
+    name: '',
+    type: '',
+    proteins: 0,
+    fat: 0,
+    __v: 0,
+    calories: 0,
+    carbohydrates: 0,
+    image_large: '',
+    image_mobile: '',
+    price: 0,
+    image: '',
+  },
   ingredientsRequest: false,
   ingredientsFailed: false,
 }
 
-export const ingredientsReducer = (state = initialState, action) => {
+export const ingredientsReducer = (state = initialState, action: TProductsActions): TProductsStore => {
   switch (action.type) {
     case GET_INGREDIENTS_REQUEST: {
       return {
@@ -40,12 +64,6 @@ export const ingredientsReducer = (state = initialState, action) => {
       return {
         ...state,
         currentIngredient: action.item
-      }
-    }
-    case REMOVE_CURRENT_INGREDIENT: {
-      return {
-        ...state,
-        currentIngredient: {}
       }
     }
     default: {

@@ -2,14 +2,23 @@ import {
   REGISTER_REQUEST,
   REGISTER_SUCCESS,
   REGISTER_FAILED,
+} from '../constants/register'
+
+import {
+  TRegisterActions
 } from '../actions/register'
 
-const initialState = {
-  registerRequest: false,
-  regiterFailed: false,
+type TRegisterStore = {
+  registerRequest: boolean;
+  registerFailed: boolean;
 }
 
-export const registerReducer = (state = initialState, action) => {
+const initialState: TRegisterStore = {
+  registerRequest: false,
+  registerFailed: false,
+}
+
+export const registerReducer = (state = initialState, action: TRegisterActions): TRegisterStore => {
   switch (action.type) {
     case REGISTER_REQUEST: {
       return {
@@ -20,7 +29,6 @@ export const registerReducer = (state = initialState, action) => {
     case REGISTER_SUCCESS: {
       return {
         ...state,
-        accessToken: action.accessToken,
         registerRequest: false,
         registerFailed: false,
       }

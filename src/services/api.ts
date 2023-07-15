@@ -1,4 +1,4 @@
-import { CustomResponse, TResponseBody, TUser, TItem } from "../utils/types";
+import { CustomResponse, TResponseBody, TUser, TOrder } from "./types/types"
 
 const url = 'https://norma.nomoreparties.space/api'
 
@@ -34,7 +34,7 @@ Promise<CustomResponse<TResponseBody & TUser>> =>
     referrerPolicy: 'no-referrer'
   });
 
-export const updateUserRequest = async (token: string, form: {email: string, name: string, password: string}):
+export const updateUserRequest = async (token: string, form?: {email: string, name: string, password: string}):
 Promise<CustomResponse<TResponseBody & TUser>> =>
   await fetch(`${url}/auth/user`, {
     method: 'PATCH',
@@ -132,9 +132,9 @@ Promise<CustomResponse<TResponseBody>> => {
   .catch(err => console.log(err))
 };
 
-export const setOrder = async (ingredients: Array<TItem>, func: any):
-Promise<CustomResponse<TResponseBody>> => {
-  return await fetch(`${url}/api/orders`, {
+export const setOrder = async (ingredients: Array<String>):
+Promise<CustomResponse<TResponseBody & TOrder>> => {
+  return await fetch(`${url}/orders`, {
     method: 'POST',
     mode: 'cors',
     cache: 'no-cache',
@@ -147,5 +147,4 @@ Promise<CustomResponse<TResponseBody>> => {
     body: JSON.stringify({ingredients})
   })
   .then(res => res.json())
-  .catch(err => func())
 }

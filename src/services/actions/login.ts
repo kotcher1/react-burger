@@ -39,7 +39,7 @@ export const getLoginSuccesAction = (): IGetLoginSuccessAction => ({
 });
 
 export const login = ({email, password}: {email: string, password: string}): any => {
-  return function(dispatch) {
+  return function(dispatch: any) {
     dispatch(getLoginRequestAction());
     loginRequest({email, password})
     .then(res => res.json())

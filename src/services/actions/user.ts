@@ -13,7 +13,6 @@ import {
   PASSWORD_RESET,
   USER_LOGOUT,
   SET_PASSWORD,
-  SET_TOKEN,
   SET_SIGNIN,
 } from '../constants/user'
 
@@ -33,6 +32,25 @@ export interface IUserLogout {
   readonly type: typeof USER_LOGOUT;
 }
 
+export interface IPasswordRequest {
+  readonly type: typeof PASSWORD_REQUEST;
+}
+
+export interface IPasswordReset {
+  readonly type: typeof PASSWORD_RESET;
+}
+
+export interface ISetSignin {
+  readonly type: typeof SET_SIGNIN;
+}
+
+export type TUserActions = ISetUserInformation
+  | ISetPassword
+  | IUserLogout
+  | IPasswordRequest
+  | IPasswordReset
+  | ISetSignin
+
 export const setUserInformation = (name: string, email: string, accessToken: string): ISetUserInformation => ({
   type: SET_USER_INFORMATION,
   name,
@@ -49,57 +67,56 @@ export const userLogout = (): IUserLogout => ({
   type: USER_LOGOUT,
 })
 
-export function getUser(accessToken: string): any {
-  return function(dispatch) {
+export const passwordRequest = (): IPasswordRequest => ({
+  type: PASSWORD_REQUEST,
+})
+
+export const passwordReset = (): IPasswordReset => ({
+  type: PASSWORD_RESET,
+})
+
+export const setSignin = (): ISetSignin => ({
+  type: SET_SIGNIN,
+})
+
+export const getUser = (accessToken: string): any => {
+  return function(dispatch: any) {
     fetchWithRefresh(getUserRequest, accessToken)
     .catch((err) => {
       console.log(err)
     })
     .then(res => {
       if (res && res.success) {
-        dispatch({
-          type: 'SET_USER_INFORMATION',
-          email: res.user.email,
-          name: res.user.name,
-        })
-        dispatch({
-          type: 'SET_TOKEN',
-          accessToken: getCookie('accessToken'),
-        });
+        const accessToken = getCookie('accessToken');
+        if (typeof accessToken == 'string' && accessToken) {
+          dispatch(setUserInformation(res.user.name, res.user.email, accessToken))
+        }
       }
     })
   }
 }
 
-export function changeUser(form, accessToken) {
-  return function(dispatch) {
+export const changeUser = (form: {name: string, email: string, password: string}, accessToken: string): any => {
+  return function(dispatch: any) {
     fetchWithRefresh(updateUserRequest, accessToken, form)
     .catch((err) => {
       console.log(err)
     })
     .then(res => {
       if (res && res.success) {
-        dispatch({
-          type: 'SET_PASSWORD',
-          password: form.password
-        });
-        dispatch({
-          type: 'SET_USER_INFORMATION',
-          email: res.user.email,
-          name: res.user.name,
-        })
-        dispatch({
-          type: 'SET_TOKEN',
-          accessToken: getCookie('accessToken'),
-        });
+        dispatch(setPassword(form.password));
+        const accessToken = getCookie('accessToken');
+        if (typeof accessToken == 'string' && accessToken) {
+          setUserInformation(res.user.name, res.user.email, accessToken)
+        }
       }
     });
   }
 }
 
 
-export function forgotPassword(email) {
-  return function(dispatch) {
+export const forgotPassword = (email: string): any => {
+  return function(dispatch: any) {
     forgotPasswordRequest(email)
     .then(res => res.json())
     .catch((err) => {
@@ -107,16 +124,14 @@ export function forgotPassword(email) {
     })
     .then(res => {
       if (res && res.success) {
-        dispatch({
-          type: 'PASSWORD_REQUEST',
-        });
+        dispatch(passwordRequest());
       }
     });
   }
 };
 
-export function resetPassword(form) {
-  return function(dispatch) {
+export const resetPassword = (form: {password: string, token: string}): any => {
+  return function(dispatch: any) {
     changePasswordRequest(form)
     .then(res => res.json())
     .catch((err) => {
@@ -124,29 +139,33 @@ export function resetPassword(form) {
     })
     .then(res => {
       if (res && res.success) {
-        dispatch({
-          type: 'PASSWORD_RESET',
-        });
+        dispatch(passwordReset());
       }
     });
   }
 };
 
-const checkResponse = (res) => {
-  return res.ok ? res.json() : res.json().then((err) => Promise.reject(err));
+const checkResponse = (res: any) => {
+  return res.ok ? res.json() : res.json().then((err: any) => Promise.reject(err));
 };
 
-const fetchWithRefresh = async (fc, accessToken, form = {}) => {
+const fetchWithRefresh = async (fc: any, accessToken: string, form?: {email: string, name: string, password: string}) => {
   try {
     const res = await fc(accessToken, form);
     return await checkResponse(res);
-  } catch (err) {
+  } catch (err: any) {
     if (err.message === "jwt expired") {
-      const refreshData = await getTokenRequest({token: getCookie('token')});
-      setCookie('token', refreshData.refreshToken, {path: '/'})
-      setCookie('accessToken', refreshData.accessToken, {path: '/'})
-      const res = await fc(refreshData.accessToken, form);
-      return await checkResponse(res);
+      const cookie = getCookie('token')
+      if (cookie && typeof cookie === 'string') {
+        const refreshData = await getTokenRequest({token: cookie});
+        //@ts-ignore
+        setCookie('token', refreshData.refreshToken, {path: '/'})
+        //@ts-ignore
+        setCookie('accessToken', refreshData.accessToken, {path: '/'})
+        //@ts-ignore
+        const res = await fc(refreshData.accessToken, form);
+        return await checkResponse(res);
+      }
     } else {
       return Promise.reject(err);
     }

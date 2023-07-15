@@ -6,12 +6,38 @@ import {
   SET_INGREDIENTS,
 } from '../constants/constructor'
 
-const initialState = {
-  bunIngredient: '',
+import {
+  TConstructorActions
+} from '../actions/constructor'
+
+import {
+  TItem
+} from '../types/types'
+
+type TConstructorState = {
+  bunIngredient: TItem,
+  currentIngredientsList: TItem[]
+}
+
+const initialState: TConstructorState = {
+  bunIngredient: {
+    _id: '',
+    name: '',
+    type: '',
+    proteins: 0,
+    fat: 0,
+    __v: 0,
+    calories: 0,
+    carbohydrates: 0,
+    image_large: '',
+    image_mobile: '',
+    price: 0,
+    image: '',
+  },
   currentIngredientsList: [],
 }
 
-export const constructorReducer = (state = initialState, action) => {
+export const constructorReducer = (state = initialState, action: TConstructorActions): TConstructorState => {
    switch (action.type) {
     case ADD_INGREDIENT_TO_CURRENTS: {
       return {

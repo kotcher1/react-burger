@@ -2,22 +2,20 @@ import React, {useEffect} from 'react';
 
 import style from './ingredient-details.module.css'
 
-import {useSelector, useDispatch} from 'react-redux'
+import {useSelector, useDispatch} from '../../services/hooks'
 
 import { useParams } from 'react-router-dom';
 import { addIngredients } from '../../services/actions/products'
 
-import { TItem } from '../../utils/types'
+import { TItem } from '../../services/types/types'
 
 export default function IngredientDetails({changeNav}: {changeNav?: (val: string) => void}) {
 
   const dispatch = useDispatch()
-  // @ts-ignore
   const ingredients = useSelector(store => store.ingredients.ingredientsList)
 
   useEffect(() => {
     if(ingredients.length === 0) {
-      // @ts-ignore
       dispatch(addIngredients())
     }
     if(changeNav) {
@@ -27,13 +25,11 @@ export default function IngredientDetails({changeNav}: {changeNav?: (val: string
 
   useEffect(() => {
     if(ingredients.length === 0) {
-      // @ts-ignore
       dispatch(addIngredients())
     }
   }, [ingredients])
 
   const {id} = useParams()
-  // @ts-ignore
   const currentIngredient = useSelector(store => store.ingredients.currentIngredient)
   const idIngredient = ingredients.find((element: TItem) => element._id === id)
 
@@ -41,7 +37,7 @@ export default function IngredientDetails({changeNav}: {changeNav?: (val: string
 
   const info = currentIngredient._id ? currentIngredient : idIngredient
 
-  return info && (
+  const returnValue = info ? (
     <div className={style.details}>
       <p className={`${style.title} text_type_main-large`}>
         Детали ингредиента
@@ -87,5 +83,7 @@ export default function IngredientDetails({changeNav}: {changeNav?: (val: string
         </div>
       </div>
     </div>
-  )
+  ) : null
+
+  return returnValue
 }
