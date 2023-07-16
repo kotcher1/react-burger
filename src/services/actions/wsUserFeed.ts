@@ -72,11 +72,8 @@ export const socketUserMiddleware = (wsUserUrl: string, wsUserActions: TWSUserSt
       const { type } = action;
       const { wsUserInit, wsUserSendMessage, onOpenUser, onCloseUser, onErrorUser, onMessageUser } = wsUserActions;
       if (type === wsUserInit) {
-        if(action.accessToken) {
-          const token = action.accessToken.includes('Bearer ') ? action.accessToken.slice(7) : action.accessToken.slice(9)
+          const token = action.accessToken && action.accessToken.includes('Bearer ') ? action.accessToken.slice(7) : action.accessToken.slice(9)
           wsFeedSocket = new WebSocket(`${wsUserUrl}?token=${token}`);
-        }
-
       }
       if (wsFeedSocket) {
         wsFeedSocket.onopen = event => {

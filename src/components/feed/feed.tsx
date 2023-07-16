@@ -8,8 +8,6 @@ import { TOrderItem, IMessageResponse } from '../../services/types/types';
 
 import { WS_CONNECTION_SUCCESS, WS_CONNECTION_CLOSED } from '../../services/constants/wsFeed'
 
-import { useParams } from 'react-router-dom';
-
 export default function Feed({changeNav}: {changeNav : (val: string) => void}) {
 
   const [currentOrder, setCurrentOrder] = useState<IMessageResponse>()
@@ -28,7 +26,7 @@ export default function Feed({changeNav}: {changeNav : (val: string) => void}) {
     dispatch({type: WS_CONNECTION_SUCCESS});
 
     return () => {
-        dispatch({type: WS_CONNECTION_CLOSED})
+      dispatch({type: WS_CONNECTION_CLOSED})
     }
   }, [dispatch])
 

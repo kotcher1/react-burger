@@ -1,11 +1,10 @@
 import React, {useEffect, useState} from 'react';
-import { ConstructorElement, CurrencyIcon } from '@ya.praktikum/react-developer-burger-ui-components'
+import { CurrencyIcon } from '@ya.praktikum/react-developer-burger-ui-components'
 import style from './feed-item.module.css'
 import { useParams } from 'react-router-dom'
 import { useSelector } from '../../services/hooks'
 
 import { TOrderItem, IMessageResponse } from '../../services/types/types';
-import { current } from '@reduxjs/toolkit';
 
 
 export default function FeedItem({changeNav}: {changeNav? : (val: string) => void}) {

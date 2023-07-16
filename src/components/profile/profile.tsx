@@ -1,6 +1,6 @@
 import React, {useState, useEffect, ChangeEvent} from 'react';
 
-import { EmailInput, PasswordInput, Input, Button } from '@ya.praktikum/react-developer-burger-ui-components'
+import { EmailInput, PasswordInput, Input, Button, ConstructorElement } from '@ya.praktikum/react-developer-burger-ui-components'
 
 import styles from './profile.module.css'
 
@@ -47,6 +47,7 @@ export default function Profile({changeNav}: {changeNav : (val: string) => void}
       setCurrentOrder(orders[orders.length - 1])
     }
   }, [orders])
+
 
   useEffect(() => {
 
@@ -95,9 +96,6 @@ export default function Profile({changeNav}: {changeNav : (val: string) => void}
   }
 
   const {section} = useParams()
-
-  const {id} = useParams()
-  console.log(id)
 
   return (
     <div className={`${styles.page}`}>

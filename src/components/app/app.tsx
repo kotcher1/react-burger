@@ -14,7 +14,7 @@ import FeedItem from '../feed-item/feed-item';
 
 import Profile from '../profile/profile';
 import { ProtectedRoute } from '../protected-route/protected-route';
-import { useDispatch, useSelector } from '../../services/hooks'
+import { useDispatch } from '../../services/hooks'
 import { getUser } from '../../services/actions/user'
 import { getCookie } from '../../services/utils'
 import IngredientDetails from '../ingredient-details/ingredient-details';
@@ -44,8 +44,6 @@ function App() {
   function changeNavLink(val: string): void {
     setActiveNavLink(val)
   }
-
-  const accessToken = useSelector(store => store.user.accessToken)
 
   const state = location.state;
 

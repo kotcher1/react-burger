@@ -5,7 +5,7 @@ import {
   WS_USER_GET_MESSAGE,
 } from '../constants/wsUserFeed';
 import type { TWSUserActions } from '../actions/wsUserFeed';
-import type { IMessageResponse, TOrderItem } from '../types/types';
+import type { IMessageResponse } from '../types/types';
 
 type TWSUserState = {
   wsConnected: boolean;

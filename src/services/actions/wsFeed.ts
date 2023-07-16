@@ -3,8 +3,6 @@ import type { Middleware, MiddlewareAPI } from 'redux';
 import type { TApplicationActions, AppDispatch, RootState } from '../types/index';
 import type { TOrderItem, TWSStoreActions } from '../types/types';
 
-import { addIngredients } from './products';
-
 import {
   WS_CONNECTION_START,
   WS_CONNECTION_SUCCESS,
@@ -16,7 +14,6 @@ import {
 } from '../constants/wsFeed'
 
 import { IMessageResponse, IMessage } from '../types/types';
-import { nextTick } from 'process';
 
 export interface IWSConnectionStart {
   readonly type: typeof WS_CONNECTION_START;

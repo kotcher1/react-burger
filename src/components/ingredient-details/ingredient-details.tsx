@@ -33,8 +33,6 @@ export default function IngredientDetails({changeNav}: {changeNav?: (val: string
   const currentIngredient = useSelector(store => store.ingredients.currentIngredient)
   const idIngredient = ingredients.find((element: TItem) => element._id === id)
 
- 
-
   const info = currentIngredient._id ? currentIngredient : idIngredient
 
   const returnValue = info ? (

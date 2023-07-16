@@ -11,8 +11,6 @@ import { TOrderItem } from '../../services/types/types'
 
 import group from '../../images/group.png'
 
-import { useState } from 'react'
-
 import { setWSCurrentOrder } from '../../services/actions/wsFeed';
 
 export default function OrderCard({item, block} : {item: TOrderItem, block?: string}) {
