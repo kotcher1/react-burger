@@ -41,6 +41,8 @@ export interface CustomResponse<T> extends Body {
   readonly url: string;
   clone(): Response;
   json(): any;
+  readonly accessToken?: string;
+  readonly refreshToken?: string;
 }
 
 export type TResponseBody = {
@@ -84,9 +86,6 @@ export interface IMessageResponse {
 
   id?: string;
   isBot?: boolean;
-  
-  accessToken?: string,
-  refreshToken?: string,
 }
 
 export type TOrderItem = {

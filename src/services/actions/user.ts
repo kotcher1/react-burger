@@ -155,8 +155,8 @@ const fetchWithRefresh = async (fc: any, accessToken: string, form?: {email: str
   try {
     const res = await fc(accessToken, form);
     return await checkResponse(res);
-  } catch (err: any) {
-    if (err.message === "jwt expired") {
+  } catch (err) {
+    if ((err as Error)?.message === "jwt expired") {
       const cookie = getCookie('token')
       if (cookie && typeof cookie === 'string') {
         const refreshData = await getTokenRequest({token: cookie});

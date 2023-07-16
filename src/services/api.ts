@@ -146,5 +146,4 @@ Promise<CustomResponse<TResponseBody & TOrder>> => {
     referrerPolicy: 'no-referrer',
     body: JSON.stringify({ingredients})
   })
-  .then(res => res.json())
 }

@@ -8,7 +8,6 @@ import {
 import {
   TOrder,
   TResponseBody,
-  TItem,
 } from '../types/types'
 
 import { setOrder } from '../api';
@@ -58,13 +57,14 @@ export const addId = (ingredients: Array<String>): any => {
   return function(dispatch: AppDispatch) {
     dispatch(getOrderIdRequest());
     setOrder(ingredients)
-    .catch(err => dispatch(getOrderIdFailed()))
+    .then(res => res.json())
     .then(res => {
       if (res && res.success) {
         dispatch(getOrderIdSuccess(res));
       } else {
         dispatch(getOrderIdFailed());
       }
-    });
+    })
+    .catch(err => dispatch(getOrderIdFailed()))
   }
 };
