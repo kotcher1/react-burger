@@ -9,8 +9,6 @@ import { openModal } from '../../services/actions/modal'
 
 import { TOrderItem } from '../../services/types/types'
 
-import group from '../../images/group.png'
-
 import { setWSCurrentOrder } from '../../services/actions/wsFeed';
 
 export default function OrderCard({item, block} : {item: TOrderItem, block?: string}) {
@@ -53,33 +51,38 @@ export default function OrderCard({item, block} : {item: TOrderItem, block?: str
       </p>
       <div className={`${style.ingredientsLine} pt-6`}>
         <div className={`${style.ingredientsBox}`}>
-          {item.ingredients.length > 5 && (
-            <div className={`${style.boxGradient}`}>
-              <div className={style.ingredientImageContainer}>
-                <img src={group} className={style.ingredientImage} alt="Ingredient Icon"/>
-                <div className={style.mask}>
-                  <p className={`${style.maskTitle} text text_type_main-small`}>
-                    + {item.ingredients.length - 5}
-                  </p>
-                </div>
-              </div>
-            </div>
-          ) }
           {item.ingredients.map((itemIngredient, index) => {
-            if(index < 5) {
+            if(index <= 5) {
               const ingredientInfo = ingredientsList.find(ingredientitem => {
                 return ingredientitem._id === itemIngredient
               })
               if(ingredientInfo) {
                 summary += ingredientInfo.price
               } 
-              return (
-                <div key={index} className={`${style.boxGradient}`}>
-                  <div className={style.ingredientImageContainer}>
-                    <img src={ingredientInfo && ingredientInfo.image_mobile} className={style.ingredientImage} alt="Ingredient Icon"/>
+              if(index !== 0) {
+                return (
+                  <div key={index} className={`${style.boxGradient}`}>
+                    <div className={style.ingredientImageContainer}>
+                      <img src={ingredientInfo && ingredientInfo.image_mobile} className={style.ingredientImage} alt="Ingredient Icon"/>
+                    </div>
                   </div>
-                </div>
-              )
+                )
+              } else {
+                return (
+                  <div className={`${style.boxGradient}`}>
+                    <div className={style.ingredientImageContainer}>
+                      <img src={ingredientInfo && ingredientInfo.image_mobile} className={style.ingredientImage} alt="Ingredient Icon"/>
+                      {item.ingredients.length > 6 && (
+                        <div className={style.mask}>
+                          <p className={`${style.maskTitle} text text_type_main-small`}>
+                            + {item.ingredients.length - 5}
+                          </p>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                )
+              }
             }
           })}
         </div>
