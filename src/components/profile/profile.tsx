@@ -13,7 +13,7 @@ import { changeUser } from '../../services/actions/user'
 import { Link, useParams } from 'react-router-dom';
 import OrderCard from '../order-card/order-card';
 
-import { TOrderItem, TAllOrdersItem } from '../../services/types/types';
+import { TOrderItem, TAllOrdersItem, IMessageResponse } from '../../services/types/types';
 
 interface IUser {
   name: string;
@@ -28,7 +28,7 @@ export default function Profile({changeNav}: {changeNav : (val: string) => void}
   const userPassword = useSelector((state) => state.user.password)
   const accessToken = useSelector((state) => state.user.accessToken)
 
-  const [currentOrder, setCurrentOrder] = useState<TAllOrdersItem<TOrderItem>>()
+  const [currentOrder, setCurrentOrder] = useState<IMessageResponse>()
 
   const [form, setFormValue] = useState<IUser>({
     name: userName,
@@ -40,7 +40,6 @@ export default function Profile({changeNav}: {changeNav : (val: string) => void}
 
   useEffect(() => {
     if(orders) {
-      //@ts-ignore
       setCurrentOrder(orders[orders.length - 1])
     }
   }, [orders])

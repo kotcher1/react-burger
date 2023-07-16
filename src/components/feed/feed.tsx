@@ -4,15 +4,17 @@ import { useSelector } from '../../services/hooks'
 
 import OrderCard from '../order-card/order-card';
 
-import { TOrderItem, TAllOrdersItem } from '../../services/types/types';
+import { TOrderItem, TAllOrdersItem, IMessageResponse } from '../../services/types/types';
 
 export default function Feed({changeNav}: {changeNav : (val: string) => void}) {
 
-  const [currentOrder, setCurrentOrder] = useState<TAllOrdersItem<TOrderItem>>()
+  const [currentOrder, setCurrentOrder] = useState<IMessageResponse>()
   const [ready, setReady] = useState<Number[]>([])
   const [inProcess, setInProcess] = useState<Number[]>([])
 
   const orders = useSelector(store => store.ws.messages)
+
+  console.log(orders)
 
   useEffect(() => {
     changeNav('list')
@@ -23,11 +25,8 @@ export default function Feed({changeNav}: {changeNav : (val: string) => void}) {
     setInProcess([])
     if(orders) {
       const current = orders[orders.length - 1]
-      //@ts-ignore
       setCurrentOrder(current)
-      //@ts-ignore
       if(current && current.orders) {
-        //@ts-ignore
         current.orders.forEach((item: TOrderItem) => {
           item.status === 'done' ? setReady(prevState => [...prevState, item.number]) :
             setInProcess(prevState => [...prevState, item.number])  

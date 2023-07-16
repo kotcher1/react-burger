@@ -45,7 +45,7 @@ export const wsReducer = (state = initialState, action: TWSActions): TWSState =>
       };
 
     case WS_GET_MESSAGE:
-      const msg = { ...action.payload, timestamp: new Date().getTime() / 1000 };
+      const msg = { ...action.payload};
       return {
         ...state,
         error: undefined,

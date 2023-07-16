@@ -83,9 +83,11 @@ export type TWSUserStoreActions = {
 export interface IMessageResponse {
   message?: string;
   success?: boolean;
-
-  id?: string;
-  isBot?: boolean;
+  orders?: TOrderItem[]
+  // id?: string;
+  // isBot?: boolean;
+  total?: string,
+  totalToday: string,
 }
 
 export type TOrderItem = {

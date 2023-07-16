@@ -62,7 +62,7 @@ function App() {
 
   useEffect(() => {
     if (accessToken && typeof accessToken === 'string') {
-      dispatch({ type: WS_CONNECTION_START, accessToken });
+      dispatch({ type: WS_USER_CONNECTION_START, accessToken });
     } else {
       dispatch({ type: WS_USER_CONNECTION_START, accessToken: ''});
     }
