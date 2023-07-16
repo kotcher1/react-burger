@@ -17,6 +17,8 @@ import { WS_USER_CONNECTION_START, WS_USER_CONNECTION_CLOSED, WS_USER_CONNECTION
 
 import { TOrderItem, IMessageResponse } from '../../services/types/types';
 
+import FeedItem from '../feed-item/feed-item';
+
 interface IUser {
   name: string;
   email: string;
@@ -70,6 +72,10 @@ export default function Profile({changeNav}: {changeNav : (val: string) => void}
     changeNav('profile')
   }, [])
 
+  
+  const {section} = useParams()
+  const {id} = useParams()
+
   function clickLogoutButton() {
     dispatch(logout())
   }
@@ -95,9 +101,8 @@ export default function Profile({changeNav}: {changeNav : (val: string) => void}
     setButtonsState(false)
   }
 
-  const {section} = useParams()
 
-  return (
+  return (section && id ? <FeedItem/> : (
     <div className={`${styles.page}`}>
       <div className={`${styles.container} pt-30`}>
         <div className={`${styles.pageColumn} ${styles.navigation}`}>
@@ -165,5 +170,5 @@ export default function Profile({changeNav}: {changeNav : (val: string) => void}
         )}
       </div>
     </div>
-  )
+  ))
 }

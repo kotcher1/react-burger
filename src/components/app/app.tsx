@@ -77,8 +77,9 @@ function App() {
         <Route path="/reset-password" element={<ProtectedRoute type="no-login" element={<Password changeNav={changeNavLink}/>}/>}/>
         <Route path="/profile" element={<ProtectedRoute element={<Profile changeNav={changeNavLink}/>}/>}>
           <Route index element={<ProtectedRoute element={<Profile changeNav={changeNavLink}/>}/>}/>
-          <Route path="/profile/:section" element={null} />
-          <Route path="/profile/orders/:id" element={<FeedItem/>}/>
+          <Route path="/profile/:section" element={<ProtectedRoute element={null}/>}>
+            <Route path=":id" element={<ProtectedRoute element={<FeedItem/>}/>}/>
+          </Route>
         </Route>
         <Route path="/feed" element={<Outlet/>}>
           <Route index element={<Feed changeNav={changeNavLink}/>}/>
@@ -88,7 +89,7 @@ function App() {
       {state?.backgroundLocation && (
         <Routes>
           <Route path="/ingredients/:id" element={<ModalOverlay type="product" />} />
-          <Route path="/profile/orders/:id" element={<ModalOverlay type="orderInfo" />}/>
+          <Route path="/profile/orders/:id" element={<ProtectedRoute element={<ModalOverlay type="orderInfo" />}/>}/>
           <Route path="/feed/:id" element={<ModalOverlay page="feed" type="orderInfo" />}/>
         </Routes>
       )}

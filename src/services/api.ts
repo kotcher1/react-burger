@@ -1,5 +1,7 @@
 import { CustomResponse, TResponseBody, TUser, TOrder } from "./types/types"
 
+import { getCookie } from './utils'
+
 const url = 'https://norma.nomoreparties.space/api'
 
 export const getIngredients = fetch(`${url}/ingredients`).then(res => res.json())
@@ -134,13 +136,15 @@ Promise<CustomResponse<TResponseBody>> => {
 
 export const setOrder = async (ingredients: Array<String>):
 Promise<CustomResponse<TResponseBody & TOrder>> => {
+  const token: string = getCookie('accessToken') || ''
   return await fetch(`${url}/orders`, {
     method: 'POST',
     mode: 'cors',
     cache: 'no-cache',
     credentials: 'same-origin',
     headers: {
-      'Content-Type': 'application/json'
+      'Content-Type': 'application/json',
+      Authorization: token,
     },
     redirect: 'follow',
     referrerPolicy: 'no-referrer',
