@@ -51,7 +51,7 @@ export const wsReducer = (state = initialState, action: TWSActions): TWSState =>
         error: undefined,
         messages: [...state.messages, msg]
       };
-    case   SET_WS_CURRENT_ORDER: {
+    case SET_WS_CURRENT_ORDER: {
       return {
         ...state,
         currentOrder: action.item,

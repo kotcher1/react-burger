@@ -13,7 +13,9 @@ import { changeUser } from '../../services/actions/user'
 import { Link, useParams } from 'react-router-dom';
 import OrderCard from '../order-card/order-card';
 
-import { TOrderItem, TAllOrdersItem, IMessageResponse } from '../../services/types/types';
+import { WS_USER_CONNECTION_START, WS_USER_CONNECTION_CLOSED, WS_USER_CONNECTION_SUCCESS } from '../../services/constants/wsUserFeed'
+
+import { TOrderItem, IMessageResponse } from '../../services/types/types';
 
 interface IUser {
   name: string;
@@ -36,6 +38,8 @@ export default function Profile({changeNav}: {changeNav : (val: string) => void}
     password: userPassword,
   })
 
+  const dispatch = useDispatch()
+
   const orders = useSelector(store => store.wsUser.messages)
 
   useEffect(() => {
@@ -44,9 +48,22 @@ export default function Profile({changeNav}: {changeNav : (val: string) => void}
     }
   }, [orders])
 
-  const [buttonsState, setButtonsState] = useState<boolean>(false)
+  useEffect(() => {
 
-  const dispatch = useDispatch();
+    dispatch({ type: WS_USER_CONNECTION_SUCCESS })
+
+    if(accessToken && typeof accessToken === 'string') {
+      dispatch({ type: WS_USER_CONNECTION_START, accessToken});
+    } else {
+      dispatch({ type: WS_USER_CONNECTION_START, accessToken: ''});
+    }
+
+    return () => {
+        dispatch({type: WS_USER_CONNECTION_CLOSED})
+    }
+  }, [dispatch])
+
+  const [buttonsState, setButtonsState] = useState<boolean>(false)
 
   useEffect(() => {
     changeNav('profile')
@@ -80,6 +97,7 @@ export default function Profile({changeNav}: {changeNav : (val: string) => void}
   const {section} = useParams()
 
   const {id} = useParams()
+  console.log(id)
 
   return (
     <div className={`${styles.page}`}>

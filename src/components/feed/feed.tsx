@@ -1,10 +1,14 @@
 import React, {useEffect, useState} from 'react';
 import style from './feed.module.css'
-import { useSelector } from '../../services/hooks'
+import { useDispatch, useSelector } from '../../services/hooks'
 
 import OrderCard from '../order-card/order-card';
 
-import { TOrderItem, TAllOrdersItem, IMessageResponse } from '../../services/types/types';
+import { TOrderItem, IMessageResponse } from '../../services/types/types';
+
+import { WS_CONNECTION_SUCCESS, WS_CONNECTION_CLOSED } from '../../services/constants/wsFeed'
+
+import { useParams } from 'react-router-dom';
 
 export default function Feed({changeNav}: {changeNav : (val: string) => void}) {
 
@@ -14,11 +18,19 @@ export default function Feed({changeNav}: {changeNav : (val: string) => void}) {
 
   const orders = useSelector(store => store.ws.messages)
 
-  console.log(orders)
+  const dispatch = useDispatch()
 
   useEffect(() => {
     changeNav('list')
   }, [])
+
+  useEffect(() => {
+    dispatch({type: WS_CONNECTION_SUCCESS});
+
+    return () => {
+        dispatch({type: WS_CONNECTION_CLOSED})
+    }
+  }, [dispatch])
 
   useEffect(() => {
     setReady([])

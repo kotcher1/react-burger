@@ -3,6 +3,8 @@ import type { Middleware, MiddlewareAPI } from 'redux';
 import type { TApplicationActions, AppDispatch, RootState } from '../types/index';
 import type { TOrderItem, TWSStoreActions } from '../types/types';
 
+import { addIngredients } from './products';
+
 import {
   WS_CONNECTION_START,
   WS_CONNECTION_SUCCESS,
@@ -14,6 +16,7 @@ import {
 } from '../constants/wsFeed'
 
 import { IMessageResponse, IMessage } from '../types/types';
+import { nextTick } from 'process';
 
 export interface IWSConnectionStart {
   readonly type: typeof WS_CONNECTION_START;
@@ -21,7 +24,7 @@ export interface IWSConnectionStart {
 
 export interface ISetWSCurrentOrder {
   readonly type: typeof SET_WS_CURRENT_ORDER;
-  readonly item: TOrderItem;
+  readonly item: TOrderItem | null;
 }
 
 export interface IWSConnectionSuccessAction {
@@ -67,17 +70,24 @@ export const socketMiddleware = (wsUrl: string, wsActions: TWSStoreActions): Mid
 
 
     return next => (action: TApplicationActions) => {
+      
 
       const { dispatch } = store;
+
       const { type } = action;
       const { wsInit, wsSendMessage, onOpen, onClose, onError, onMessage } = wsActions;
       if (type === wsInit) {
         wsFeedSocket = new WebSocket(`${wsUrl}`);
       }
       if (wsFeedSocket) {
-        wsFeedSocket.onopen = event => {
-          dispatch({ type: onOpen, payload: event });
-        };
+        if(type === onClose) {
+          wsFeedSocket.onopen = event => {
+            dispatch({ type: onOpen, payload: event });
+          };
+        }
+        if(type === onClose) {
+          wsFeedSocket.close(1000, 'feed connection closed by client')
+        }
         wsFeedSocket.onerror = event => {
           dispatch({ type: onError, payload: event });
         };
@@ -100,6 +110,7 @@ export const socketMiddleware = (wsUrl: string, wsActions: TWSStoreActions): Mid
         next(action);
       }
     }
+    return
   }) as Middleware;
 }
 

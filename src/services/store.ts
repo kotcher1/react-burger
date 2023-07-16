@@ -38,12 +38,12 @@ const wsActions: TWSStoreActions = {
 };
 
 const wsUserActions: TWSUserStoreActions = {
-  wsInit: WS_USER_CONNECTION_START,
-  wsSendMessage: WS_USER_SEND_MESSAGE,
-  onOpen: WS_USER_CONNECTION_SUCCESS,
-  onClose: WS_USER_CONNECTION_CLOSED,
-  onError: WS_USER_CONNECTION_ERROR,
-  onMessage: WS_USER_GET_MESSAGE
+  wsUserInit: WS_USER_CONNECTION_START,
+  wsUserSendMessage: WS_USER_SEND_MESSAGE,
+  onOpenUser: WS_USER_CONNECTION_SUCCESS,
+  onCloseUser: WS_USER_CONNECTION_CLOSED,
+  onErrorUser: WS_USER_CONNECTION_ERROR,
+  onMessageUser: WS_USER_GET_MESSAGE
 };
 
 export const store = createStore(

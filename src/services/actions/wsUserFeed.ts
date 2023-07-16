@@ -17,6 +17,10 @@ import { IMessageResponse, IMessage } from '../types/types';
 
 export interface IWSConnectionStart {
   readonly type: typeof WS_USER_CONNECTION_START;
+}
+
+export interface IWSConnectionStart {
+  readonly type: typeof WS_USER_CONNECTION_START;
   readonly accessToken: string;
 }
 
@@ -66,11 +70,9 @@ export const socketUserMiddleware = (wsUserUrl: string, wsUserActions: TWSUserSt
 
       const { dispatch } = store;
       const { type } = action;
-      const { wsInit, wsSendMessage, onOpen, onClose, onError, onMessage } = wsUserActions;
-      if (type === wsInit) {
-        //@ts-ignore
+      const { wsUserInit, wsUserSendMessage, onOpenUser, onCloseUser, onErrorUser, onMessageUser } = wsUserActions;
+      if (type === wsUserInit) {
         if(action.accessToken) {
-          //@ts-ignore
           const token = action.accessToken.includes('Bearer ') ? action.accessToken.slice(7) : action.accessToken.slice(9)
           wsFeedSocket = new WebSocket(`${wsUserUrl}?token=${token}`);
         }
@@ -78,22 +80,24 @@ export const socketUserMiddleware = (wsUserUrl: string, wsUserActions: TWSUserSt
       }
       if (wsFeedSocket) {
         wsFeedSocket.onopen = event => {
-          dispatch({ type: onOpen, payload: event });
+          dispatch({ type: onOpenUser, payload: event });
         };
+        if(type === onCloseUser) {
+          wsFeedSocket.close(1000, 'feed connection closed by client')
+        }
         wsFeedSocket.onerror = event => {
-          dispatch({ type: onError, payload: event });
+          dispatch({ type: onErrorUser, payload: event });
         };
         wsFeedSocket.onmessage = event => {
           const { data } = event;
           const parsedData: IMessageResponse = JSON.parse(data);
           const { success, ...restParsedData } = parsedData;
-          dispatch({ type: onMessage, payload: {...restParsedData} });
+          dispatch({ type: onMessageUser, payload: {...restParsedData} });
         };
         wsFeedSocket.onclose = event => {
-          dispatch({ type: onClose, payload: event });
+          dispatch({ type: onCloseUser, payload: event });
         };
-
-        if (type === wsSendMessage) {
+        if (type === wsUserSendMessage) {
           const payload = action.payload;
           const message = { ...(payload as IMessage) };
           wsFeedSocket.send(JSON.stringify(message));

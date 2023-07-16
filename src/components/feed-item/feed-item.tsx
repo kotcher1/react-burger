@@ -1,16 +1,21 @@
-import React, {useEffect} from 'react';
-import { CurrencyIcon } from '@ya.praktikum/react-developer-burger-ui-components'
+import React, {useEffect, useState} from 'react';
+import { ConstructorElement, CurrencyIcon } from '@ya.praktikum/react-developer-burger-ui-components'
 import style from './feed-item.module.css'
 import { useParams } from 'react-router-dom'
-import { TOrderItem } from '../../services/types/types';
 import { useSelector } from '../../services/hooks'
+
+import { TOrderItem, IMessageResponse } from '../../services/types/types';
+import { current } from '@reduxjs/toolkit';
 
 
 export default function FeedItem({changeNav}: {changeNav? : (val: string) => void}) {
 
   const {id} = useParams()
 
-  const currentOrder = useSelector(store => store.ws.currentOrder)
+  const [currentGroup, setCurrentGroup] = useState<IMessageResponse>()
+  const [item, setItem] = useState<TOrderItem>()
+
+  const orders = useSelector(store => store.ws.messages)
 
   const elements: string[] = []
 
@@ -23,7 +28,18 @@ export default function FeedItem({changeNav}: {changeNav? : (val: string) => voi
 
   }, [])
 
-  const date = currentOrder &&  new Date(currentOrder.createdAt)
+  useEffect(() => {
+    if(orders) {
+      setCurrentGroup(orders[orders.length - 1])
+    }
+  }, [orders])
+
+  useEffect(() => {
+    const element = currentGroup && currentGroup.orders && currentGroup.orders.find(item => item._id === id)
+    setItem(element)
+  }, [currentGroup])
+
+  const date = item && new Date(item.createdAt)
 
   const optionsDate: Intl.DateTimeFormatOptions = {
     day: 'numeric',
@@ -41,23 +57,23 @@ export default function FeedItem({changeNav}: {changeNav? : (val: string) => voi
           #{id}
         </p>
         <p className={`${style.orderName} text text_type_main-default mt-10`}>
-          {currentOrder && currentOrder.name}
+          {item && item.name}
         </p>
         <p className={`${style.orderStatus} text text_type_main-small mt-3`}>
-          {currentOrder && currentOrder.status === 'done' ? 'Готов' : 'В работе'}
+          {item && item.status === 'done' ? 'Готов' : 'В работе'}
         </p>
         <p className={`${style.compoundTitle} text text_type_main-default mt-15`}>
           Состав
         </p>
         <div className={`${style.componentsBlock} mt-6`}>
-          {currentOrder && currentOrder.ingredients.map((ingredient, index) => {
+          {item && item.ingredients.map((ingredient, index) => {
             if(!elements.includes(ingredient)) {
               const ingredientsSet = ingredientsList.find(ingredientitem => {
                 return ingredientitem._id === ingredient
               })
               elements.push(ingredient)
               const price = ingredientsSet && ingredientsSet.price
-              const count = currentOrder.ingredients.filter(item => item === ingredient).length | 0
+              const count = item.ingredients.filter(item => item === ingredient).length | 0
               if(price && count) {
                 summary += price * count
               }

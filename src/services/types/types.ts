@@ -72,12 +72,12 @@ export type TWSStoreActions = {
   onMessage: typeof  WS_GET_MESSAGE;
 };
 export type TWSUserStoreActions = {
-  wsInit: typeof  WS_USER_CONNECTION_START;
-  wsSendMessage: typeof  WS_USER_SEND_MESSAGE;
-  onOpen: typeof  WS_USER_CONNECTION_SUCCESS;
-  onClose: typeof WS_USER_CONNECTION_CLOSED;
-  onError: typeof  WS_USER_CONNECTION_ERROR;
-  onMessage: typeof  WS_USER_GET_MESSAGE;
+  wsUserInit: typeof  WS_USER_CONNECTION_START;
+  wsUserSendMessage: typeof  WS_USER_SEND_MESSAGE;
+  onOpenUser: typeof  WS_USER_CONNECTION_SUCCESS;
+  onCloseUser: typeof WS_USER_CONNECTION_CLOSED;
+  onErrorUser: typeof  WS_USER_CONNECTION_ERROR;
+  onMessageUser: typeof  WS_USER_GET_MESSAGE;
 };
 
 export interface IMessageResponse {

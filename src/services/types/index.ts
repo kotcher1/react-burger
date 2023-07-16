@@ -12,6 +12,7 @@ import { TLoginActions } from '../actions/login'
 import { TUserActions } from '../actions/user'
 import { TLogoutActions } from '../actions/logout'
 import { TWSActions } from '../actions/wsFeed'
+import { TWSUserActions } from '../actions/wsUserFeed'
 
 export type RootState = ReturnType<typeof store.getState>; 
 
@@ -23,7 +24,8 @@ export type TApplicationActions = TWSActions
 | TRegisterActions 
 | TLoginActions 
 | TUserActions 
-| TLogoutActions;
+| TLogoutActions
+| TWSUserActions;
 
 export type AppDispatch = ThunkDispatch<RootState, unknown, TApplicationActions>; 
 

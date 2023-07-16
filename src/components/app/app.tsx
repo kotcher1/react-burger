@@ -22,12 +22,16 @@ import IngredientDetails from '../ingredient-details/ingredient-details';
 import { addIngredients } from '../../services/actions/products';
 
 import {
+  WS_USER_CONNECTION_START
+} from '../../services/constants/wsUserFeed';
+
+import {
+  WS_CONNECTION_START
+} from '../../services/constants/wsFeed';
+
+import {
   setSignin
 } from '../../services/actions/user'
-
-import { WS_CONNECTION_START } from '../../services/constants/wsFeed'
-import { WS_USER_CONNECTION_START } from '../../services/constants/wsUserFeed'
-
 
 function App() {
 
@@ -47,26 +51,18 @@ function App() {
 
   useEffect(() => {
     const accessToken = getCookie('accessToken');
+    dispatch({ type: WS_CONNECTION_START });
     if(accessToken && typeof accessToken === 'string') {
       dispatch({ type: WS_USER_CONNECTION_START, accessToken});
     } else {
       dispatch({ type: WS_USER_CONNECTION_START, accessToken: ''});
     }
-    dispatch({ type: WS_CONNECTION_START});
     if(accessToken && typeof accessToken === 'string') {
       dispatch(getUser(accessToken))
       dispatch(setSignin())
     }
     dispatch(addIngredients())
   }, [])
-
-  useEffect(() => {
-    if (accessToken && typeof accessToken === 'string') {
-      dispatch({ type: WS_USER_CONNECTION_START, accessToken });
-    } else {
-      dispatch({ type: WS_USER_CONNECTION_START, accessToken: ''});
-    }
-  }, [accessToken])
 
 
   return (
