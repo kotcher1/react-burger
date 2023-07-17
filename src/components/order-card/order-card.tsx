@@ -1,4 +1,4 @@
-import { CurrencyIcon } from '@ya.praktikum/react-developer-burger-ui-components'
+import { ConstructorElement, CurrencyIcon } from '@ya.praktikum/react-developer-burger-ui-components'
 import style from './order-card.module.css'
 
 import { useDispatch, useSelector } from '../../services/hooks'
@@ -32,7 +32,6 @@ export default function OrderCard({item, block} : {item: TOrderItem, block?: str
     hour: 'numeric',
     minute: 'numeric',
   };
-
 
   const ingredientsList = useSelector(store => store.ingredients.ingredientsList);
 
@@ -69,7 +68,7 @@ export default function OrderCard({item, block} : {item: TOrderItem, block?: str
                 )
               } else {
                 return (
-                  <div className={`${style.boxGradient}`}>
+                  <div key={index} className={`${style.boxGradient}`}>
                     <div className={style.ingredientImageContainer}>
                       <img src={ingredientInfo && ingredientInfo.image_mobile} className={style.ingredientImage} alt="Ingredient Icon"/>
                       {item.ingredients.length > 6 && (

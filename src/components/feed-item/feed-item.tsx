@@ -15,27 +15,44 @@ export default function FeedItem({changeNav}: {changeNav? : (val: string) => voi
   const [item, setItem] = useState<TOrderItem>()
 
   const orders = useSelector(store => store.ws.messages)
+  const userOrders = useSelector(store => store.wsUser.messages)
 
   const elements: string[] = []
 
   let summary: number = 0
 
+  const currentOrder = useSelector(store => store.ws.currentOrder)
+
+  const isPopup = currentOrder && currentOrder._id === id
+
   useEffect(() => {
     if(changeNav) {
       changeNav('list')
     }
-
+    if(isPopup) {
+      setItem(currentOrder)
+    }
   }, [])
 
   useEffect(() => {
-    if(orders) {
-      setCurrentGroup(orders[orders.length - 1])
+    if(!isPopup) {
+      if(changeNav) {
+        if(orders) {
+          setCurrentGroup(orders[orders.length - 1])
+        }
+      } else {
+        if(userOrders) {
+          setCurrentGroup(userOrders[userOrders.length - 1])
+        }
+      }
     }
   }, [orders])
 
   useEffect(() => {
-    const element = currentGroup && currentGroup.orders && currentGroup.orders.find(item => item._id === id)
-    setItem(element)
+    if(!isPopup) {
+      const element = currentGroup && currentGroup.orders && currentGroup.orders.find(item => item._id === id)
+      setItem(element)
+    }
   }, [currentGroup])
 
   const date = item && new Date(item.createdAt)
