@@ -24,6 +24,10 @@
   align-items: center;
 }
 
+.priceNumber {
+  
+}
+
 .ingredients {
   max-height: 442px;
   overflow: auto;
