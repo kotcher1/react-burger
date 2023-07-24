@@ -4,7 +4,7 @@ import { EmailInput, PasswordInput, Button } from '@ya.praktikum/react-developer
 
 import styles from '../form/form.module.css'
 
-import { useDispatch } from 'react-redux'
+import { useDispatch } from '../../services/hooks'
 
 import { login } from '../../services/actions/login'
 
@@ -29,7 +29,6 @@ export default function Login({changeNav}: {changeNav: (val: string) => void}) {
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    // @ts-ignore
     dispatch(login({email, password}))
   }
 

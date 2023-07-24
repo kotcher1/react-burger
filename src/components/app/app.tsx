@@ -9,16 +9,29 @@ import Registration from '../registration/registration';
 import ForgotPassword from '../forgot-password/forgot-password';
 import Password from '../password/password';
 import ModalOverlay from '../modal-overlay/modal-overlay';
+import Feed from '../feed/feed';
+import FeedItem from '../feed-item/feed-item';
 
 import Profile from '../profile/profile';
 import { ProtectedRoute } from '../protected-route/protected-route';
-import { useDispatch, useSelector } from 'react-redux'
+import { useDispatch } from '../../services/hooks'
 import { getUser } from '../../services/actions/user'
 import { getCookie } from '../../services/utils'
 import IngredientDetails from '../ingredient-details/ingredient-details';
 
-import { TStore } from '../../utils/types'
+import { addIngredients } from '../../services/actions/products';
 
+import {
+  WS_USER_CONNECTION_START
+} from '../../services/constants/wsUserFeed';
+
+import {
+  WS_CONNECTION_START
+} from '../../services/constants/wsFeed';
+
+import {
+  setSignin
+} from '../../services/actions/user'
 
 function App() {
 
@@ -35,12 +48,20 @@ function App() {
   const state = location.state;
 
   useEffect(() => {
-    if(getCookie('accessToken') && typeof getCookie('accessToken') === 'string') {
-       // @ts-ignore
-      dispatch(getUser(getCookie('accessToken')))
-      dispatch({type: 'SET_SIGNIN'})
+    const accessToken = getCookie('accessToken');
+    dispatch({ type: WS_CONNECTION_START });
+    if(accessToken && typeof accessToken === 'string') {
+      dispatch({ type: WS_USER_CONNECTION_START, accessToken});
+    } else {
+      dispatch({ type: WS_USER_CONNECTION_START, accessToken: ''});
     }
+    if(accessToken && typeof accessToken === 'string') {
+      dispatch(getUser(accessToken))
+      dispatch(setSignin())
+    }
+    dispatch(addIngredients())
   }, [])
+
 
   return (
     <div className={style.app}>
@@ -56,12 +77,20 @@ function App() {
         <Route path="/reset-password" element={<ProtectedRoute type="no-login" element={<Password changeNav={changeNavLink}/>}/>}/>
         <Route path="/profile" element={<ProtectedRoute element={<Profile changeNav={changeNavLink}/>}/>}>
           <Route index element={<ProtectedRoute element={<Profile changeNav={changeNavLink}/>}/>}/>
-          <Route path="/profile/:section" element={null}/>
+          <Route path="/profile/:section" element={<ProtectedRoute element={null}/>}>
+            <Route path=":id" element={<ProtectedRoute element={<FeedItem/>}/>}/>
+          </Route>
+        </Route>
+        <Route path="/feed" element={<Outlet/>}>
+          <Route index element={<Feed changeNav={changeNavLink}/>}/>
+          <Route path="/feed/:id" element={<FeedItem changeNav={changeNavLink}/>}/>
         </Route>
       </Routes>
       {state?.backgroundLocation && (
         <Routes>
           <Route path="/ingredients/:id" element={<ModalOverlay type="product" />} />
+          <Route path="/profile/orders/:id" element={<ProtectedRoute element={<ModalOverlay type="orderInfo" />}/>}/>
+          <Route path="/feed/:id" element={<ModalOverlay page="feed" type="orderInfo" />}/>
         </Routes>
       )}
     </div>

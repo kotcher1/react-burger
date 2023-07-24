@@ -1,9 +1,8 @@
 import React, {useEffect, useRef} from 'react';
 import Product from '../product/product';
 import { Tab } from '@ya.praktikum/react-developer-burger-ui-components'
-import { useSelector, useDispatch } from 'react-redux';
-import { addIngredients } from '../../services/actions/products'
-import { TItem } from '../../utils/types'
+import { useSelector } from '../../services/hooks';
+import { TItem } from '../../services/types/types'
 
 import style from './burger-ingredients.module.css'
 
@@ -18,15 +17,11 @@ export default function BurgerIngredients() {
 
   const scrollWindow = useRef<HTMLDivElement>(null)
 
-  const dispatch = useDispatch()
-  // @ts-ignore
   const ingredientsList = useSelector(store => store.ingredients.ingredientsList);
 
   useEffect(() => {
     const tabTop = tabs.current && tabs.current.getBoundingClientRect().top + 200;
     const tabBottom = tabs.current && tabs.current.getBoundingClientRect().top - 300;
-    // @ts-ignore
-    dispatch(addIngredients())
     if(scrollWindow.current) {
       scrollWindow.current.addEventListener('scroll', () => {
         if(tabTop && tabBottom) {

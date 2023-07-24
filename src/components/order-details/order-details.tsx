@@ -4,10 +4,9 @@ import style from './order-details.module.css'
 
 import done from '../../images/done.jpg'
 
-import {useSelector} from 'react-redux'
+import {useSelector} from '../../services/hooks'
 
 export default function OrderDetails() {
-  //@ts-ignore
   const order = useSelector(store => store.order.order)
 
   return (

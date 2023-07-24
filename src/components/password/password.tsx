@@ -6,7 +6,7 @@ import { PasswordInput, Input, Button } from '@ya.praktikum/react-developer-burg
 
 import styles from '../form/form.module.css'
 
-import { useSelector, useDispatch } from 'react-redux'
+import { useSelector, useDispatch } from '../../services/hooks'
 
 import { resetPassword } from '../../services/actions/user'
 
@@ -36,11 +36,9 @@ export default function Password({changeNav} : {changeNav : (val: string) => voi
 
   function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    //@ts-ignore
     dispatch(resetPassword(newPasswordInfo))
   }
 
-  //@ts-ignore
   const passwordReset = useSelector(state => state.user.passwordReset)
 
   return !passwordReset ? (

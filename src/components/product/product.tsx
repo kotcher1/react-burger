@@ -4,12 +4,15 @@ import { Link, useLocation } from 'react-router-dom';
 
 import { Counter, CurrencyIcon } from '@ya.praktikum/react-developer-burger-ui-components'
 
-import {TItem} from '../../utils/types'
+import {TItem} from '../../services/types/types'
 
 import style from './product.module.css'
 
 import { useDrag } from "react-dnd";
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector, useDispatch } from '../../services/hooks';
+
+import { addCurrentIngredient } from '../../services/actions/products';
+import { openModal } from '../../services/actions/modal'
 
 export default function Product({info}: {info: TItem, index?: number}) {
 
@@ -18,14 +21,12 @@ export default function Product({info}: {info: TItem, index?: number}) {
   const dispatch = useDispatch()
 
   const [count, setCount] = React.useState<number>(0);
-  // @ts-ignore
   const currentIngredients = useSelector(state => state.constructors.currentIngredientsList)
-  // @ts-ignore
   const bunIngredient = useSelector(state => state.constructors.bunIngredient)
 
   const handleIngredientClick = () => {
-    dispatch({type: 'ADD_CURRENT_INGREDIENT', item: info})
-    dispatch({type: 'OPEN_MODAL', product: true, order: false})
+    dispatch(addCurrentIngredient(info))
+    dispatch(openModal(true, false, false))
   }
 
   const location = useLocation()

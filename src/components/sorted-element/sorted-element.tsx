@@ -5,18 +5,19 @@ import update from 'immutability-helper'
 import style from './sorted-element.module.css'
 import dots from '../../images/dots.svg'
 
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector, useDispatch } from '../../services/hooks';
 
-import { TItem } from '../../utils/types';
-//@ts-ignore
-import { v4 as uuid } from 'uuid'
+import { TItem } from '../../services/types/types';
+
+import { v4 as uuidv4 } from "uuid";
 
 import { useDrop, useDrag } from "react-dnd";
 
 import { ConstructorElement } from '@ya.praktikum/react-developer-burger-ui-components'
 
+import { sortCurrentIngredients, removeIngredientFromCurrents } from '../../services/actions/constructor'
+
 export default function SortedElement({item, index}: {item: TItem, index: number}) {
-  //@ts-ignore
   const constructorIngredientsList = useSelector(store => store.constructors.currentIngredientsList);
 
   const [cards, setCards] = useState([...constructorIngredientsList])
@@ -69,17 +70,17 @@ export default function SortedElement({item, index}: {item: TItem, index: number
   }, [])
 
   useEffect(() => {
-    dispatch({type: 'SORT_CURRENT_INGREDIENT', list: cards})
+    dispatch(sortCurrentIngredients(cards))
   }, [cards])
 
   useEffect(() => {
     setCards(constructorIngredientsList)
   }, [constructorIngredientsList])
 
-const [{ isDragging }, drag] = useDrag({
+  const [{ isDragging }, drag] = useDrag({
     type: 'constructorItem',
     item: () => {
-      return { id: uuid(), index }
+      return { id: uuidv4(), index }
     },
     collect: (monitor) => ({
       isDragging: monitor.isDragging(),
@@ -88,9 +89,9 @@ const [{ isDragging }, drag] = useDrag({
   drag(drop(ref))
 
   const handleDeleteButton = (id: string, ingredientIndex: number) => {
-    dispatch({type: 'REMOVE_INGREDIENT_FROM_CURRENTS', item: constructorIngredientsList.filter((ingredient: TItem, index: number) => {
+    dispatch(removeIngredientFromCurrents(constructorIngredientsList.filter((ingredient: TItem, index: number) => {
       return ingredient._id !== id || index !== ingredientIndex})
-    })
+    ))
   }
 
   return (

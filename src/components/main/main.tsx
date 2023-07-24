@@ -13,6 +13,8 @@ export default function Main({changeNav}: {changeNav: (val: string) => void}) {
     changeNav('constructor')
   }, [])
 
+
+
   return (
     <main className={`${style.main} pb-10`}>
       <DndProvider backend={HTML5Backend}>

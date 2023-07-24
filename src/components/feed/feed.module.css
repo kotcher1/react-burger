@@ -1,0 +1,70 @@
+.container {
+  max-width: 1240px;
+  margin: 0 auto;
+}
+
+.title {
+  text-align: left;
+}
+
+.info {
+  display: flex;
+  justify-content: space-between;
+}
+
+.list {
+  width: 100%;
+  max-width: 608px;
+  display: flex;
+  flex-direction: column;
+  max-height: 812px;
+  overflow-y: scroll;
+  box-sizing: border-box;
+}
+
+.status {
+  width: 100%;
+  max-width: 580px;
+  display: flex;
+  flex-direction: column;
+}
+
+.statusColumns {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+}
+
+.statusColumn {
+  width: 100%;
+  /* max-width: 272px; */
+  width: auto
+}
+
+.statusTitle {
+  text-align: left;
+}
+
+.activeOrderNumber {
+  text-align: left;
+}
+
+.endprocess {
+  color: #00CCCC ;
+}
+
+.completed {
+  text-align: left;
+}
+
+.activeOrdersList {
+  max-height: 245px;
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+}
+
+.activeOrderNumber:nth-child(n+11) {
+  margin-left: 5px
+}
+

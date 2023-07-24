@@ -4,7 +4,7 @@ import { EmailInput, PasswordInput, Input, Button } from '@ya.praktikum/react-de
 
 import styles from '../form/form.module.css'
 
-import { useDispatch } from 'react-redux'
+import { useDispatch } from '../../services/hooks'
 
 import { register } from '../../services/actions/register'
 
@@ -32,7 +32,6 @@ export default function Registration({changeNav}: {changeNav: (val: string) => v
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    //@ts-ignore
     dispatch(register({name, email, password}))
   }
 

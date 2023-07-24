@@ -4,7 +4,7 @@ import { EmailInput, Button } from '@ya.praktikum/react-developer-burger-ui-comp
 
 import styles from '../form/form.module.css'
 
-import { useSelector, useDispatch } from 'react-redux'
+import { useSelector, useDispatch } from '../../services/hooks'
 
 import { forgotPassword } from '../../services/actions/user'
 import { Navigate } from 'react-router-dom';
@@ -26,11 +26,9 @@ export default function ForgotPassword({changeNav}: {changeNav: (val :string) =>
   
   function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    // @ts-ignore
     dispatch(forgotPassword(email))
   }
 
-  // @ts-ignore
   const passwordRequest = useSelector(state => state.user.passwordRequest)
 
   return !passwordRequest ? (
